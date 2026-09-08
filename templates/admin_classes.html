@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Classes - Shubh Classes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .classes-page {
+            min-height: 100vh;
+            background: #f5f7fb;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .classes-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .classes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            gap: 20px;
+        }
+
+        .classes-title small {
+            display: block;
+            color: #ff7a2f;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 7px;
+            text-transform: uppercase;
+        }
+
+        .classes-title h1 {
+            margin: 0;
+            color: #17243f;
+            font-size: 38px;
+            font-weight: 800;
+        }
+
+        .classes-title p {
+            margin: 8px 0 0;
+            color: #718096;
+            font-size: 15px;
+        }
+
+        .add-class-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            background: #ff7a2f;
+            color: white;
+            text-decoration: none;
+            padding: 13px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(255, 122, 47, 0.22);
+            transition: 0.2s ease;
+        }
+
+        .add-class-btn:hover {
+            transform: translateY(-2px);
+            background: #f46d24;
+        }
+
+        .classes-summary {
+            background: white;
+            border-radius: 18px;
+            padding: 22px 26px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(23, 36, 63, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .summary-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: #fff1e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .summary-text strong {
+            display: block;
+            color: #17243f;
+            font-size: 18px;
+        }
+
+        .summary-text span {
+            color: #718096;
+            font-size: 13px;
+        }
+
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 22px;
+        }
+
+        .class-card {
+            background: white;
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 8px 25px rgba(23, 36, 63, 0.07);
+            border: 1px solid #edf0f5;
+            transition: 0.2s ease;
+        }
+
+        .class-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 35px rgba(23, 36, 63, 0.11);
+        }
+
+        .class-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 15px;
+            background: #17243f;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 18px;
+        }
+
+        .class-card h2 {
+            margin: 0 0 7px;
+            color: #17243f;
+            font-size: 22px;
+        }
+
+        .class-card p {
+            margin: 0 0 22px;
+            color: #8993a4;
+            font-size: 13px;
+        }
+
+        .class-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 9px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .edit-btn {
+            background: #eef3ff;
+            color: #3157a6;
+        }
+
+        .edit-btn:hover {
+            background: #dfe8ff;
+        }
+
+        .delete-btn {
+            background: #fff0f0;
+            color: #d64545;
+        }
+
+        .delete-btn:hover {
+            background: #ffe0e0;
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 18px;
+            padding: 60px 25px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(23, 36, 63, 0.06);
+        }
+
+        .empty-icon {
+            font-size: 45px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h2 {
+            color: #17243f;
+            margin: 0 0 8px;
+        }
+
+        .empty-state p {
+            color: #8993a4;
+            margin: 0 0 22px;
+        }
+
+        .bottom-actions {
+            margin-top: 35px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .back-btn,
+        .logout-btn {
+            padding: 11px 17px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .back-btn {
+            background: #17243f;
+            color: white;
+        }
+
+        .logout-btn {
+            background: white;
+            color: #d64545;
+            border: 1px solid #f0d5d5;
+        }
+
+        @media (max-width: 700px) {
+            .classes-page {
+                padding: 25px 16px;
+            }
+
+            .classes-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .classes-title h1 {
+                font-size: 30px;
+            }
+
+            .classes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="classes-page">
+
+    <div class="classes-container">
+
+        <!-- HEADER -->
+        <div class="classes-header">
+
+            <div class="classes-title">
+                <small>Administration</small>
+
+                <h1>Classes</h1>
+
+                <p>
+                    Manage and organize all classes in your institute.
+                </p>
+            </div>
+
+            <a href="{{ url_for('add_class') }}" class="add-class-btn">
+                ＋ Add Class
+            </a>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+        <div class="classes-summary">
+
+            <div class="summary-icon">
+                📚
+            </div>
+
+            <div class="summary-text">
+                <strong>
+                    {{ classes|length }} Classes
+                </strong>
+
+                <span>
+                    Currently available in the system
+                </span>
+            </div>
+
+        </div>
+
+
+        <!-- CLASSES -->
+        {% if classes %}
+
+        <div class="classes-grid">
+
+            {% for item in classes %}
+
+            <div class="class-card">
+
+                <div class="class-icon">
+                    📚
+                </div>
+
+                <h2>
+                    {{ item.class_name }}
+                </h2>
+
+                <p>
+                    Class available for student management
+                </p>
+
+
+                <div class="class-actions">
+
+                    <a
+                        href="{{ url_for('edit_class', class_id=item.id) }}"
+                        class="edit-btn">
+                        ✏️ Edit
+                    </a>
+
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('delete_class', class_id=item.id) }}"
+                        style="display:inline;">
+
+                        <button
+                            type="submit"
+                            class="delete-btn"
+                            onclick="return confirm('Are you sure you want to delete this class?')">
+                            🗑️ Delete
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                📚
+            </div>
+
+            <h2>No Classes Found</h2>
+
+            <p>
+                Start by creating your first class.
+            </p>
+
+            <a
+                href="{{ url_for('add_class') }}"
+                class="add-class-btn">
+                ＋ Add Your First Class
+            </a>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- BOTTOM ACTIONS -->
+        <div class="bottom-actions">
+
+            <a
+                href="{{ url_for('admin_dashboard') }}"
+                class="back-btn">
+                Back to Dashboard
+            </a>
+
+            
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

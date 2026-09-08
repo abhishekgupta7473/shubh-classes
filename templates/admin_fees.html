@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fee Management - Shubh Classes</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172744;
+        }
+
+        /* ================= HEADER ================= */
+
+        .topbar {
+            background: #172744;
+            color: white;
+            padding: 18px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .brand span {
+            color: #ff7426;
+        }
+
+        .brand p {
+            margin: 4px 0 0;
+            font-size: 12px;
+            color: #cbd5e1;
+        }
+
+        .admin-label {
+            background: rgba(255,255,255,0.1);
+            padding: 9px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* ================= PAGE ================= */
+
+        .page {
+            max-width: 1400px;
+            margin: auto;
+            padding: 30px 25px 50px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .page-title h2 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .page-title p {
+            margin: 7px 0 0;
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 9px;
+            padding: 12px 17px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: .2s;
+        }
+
+        .btn-primary {
+            background: #ff7426;
+            color: white;
+        }
+
+        .btn-dark {
+            background: #172744;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            opacity: .92;
+        }
+
+        /* ================= SUMMARY ================= */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid #e3e8ef;
+            border-radius: 13px;
+            padding: 21px;
+            box-shadow: 0 5px 20px rgba(23,39,68,0.05);
+        }
+
+        .summary-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .summary-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #edf2f8;
+            font-size: 19px;
+        }
+
+        .summary-card h4 {
+            margin: 15px 0 5px;
+            color: #718096;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .summary-value {
+            font-size: 25px;
+            font-weight: 800;
+            color: #172744;
+        }
+
+        .summary-card.pending .summary-value {
+            color: #e5532f;
+        }
+
+        .summary-card.collected .summary-value {
+            color: #16865b;
+        }
+
+        /* ================= TOOLBAR ================= */
+
+        .toolbar {
+            background: white;
+            border: 1px solid #e3e8ef;
+            border-radius: 13px 13px 0 0;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 330px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: 1px solid #d7dee8;
+            border-radius: 8px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .search-box input:focus {
+            border-color: #ff7426;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 11px;
+            color: #8a96a8;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 9px;
+        }
+
+        .filter {
+            padding: 10px 13px;
+            border: 1px solid #d7dee8;
+            border-radius: 8px;
+            background: white;
+            color: #172744;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-wrapper {
+            background: white;
+            border: 1px solid #e3e8ef;
+            border-top: none;
+            border-radius: 0 0 13px 13px;
+            overflow-x: auto;
+            box-shadow: 0 5px 20px rgba(23,39,68,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1050px;
+        }
+
+        thead {
+            background: #f7f9fc;
+        }
+
+        th {
+            padding: 15px 17px;
+            text-align: left;
+            font-size: 11px;
+            color: #65748b;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            border-bottom: 1px solid #e4e9f0;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 16px 17px;
+            font-size: 13px;
+            border-bottom: 1px solid #edf0f4;
+            white-space: nowrap;
+        }
+
+        tbody tr:hover {
+            background: #fafcff;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .student-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #172744;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .student-name {
+            font-weight: 800;
+            color: #172744;
+        }
+
+        .student-id {
+            margin-top: 3px;
+            color: #8995a6;
+            font-size: 11px;
+        }
+
+        .class-badge {
+            display: inline-block;
+            padding: 5px 9px;
+            background: #edf2f8;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            color: #172744;
+        }
+
+        .money {
+            font-weight: 700;
+        }
+
+        .paid {
+            color: #16865b;
+            font-weight: 800;
+        }
+
+        .pending {
+            color: #e5532f;
+            font-weight: 800;
+        }
+
+        /* ================= STATUS ================= */
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .status-paid {
+            background: #e8f7ef;
+            color: #16865b;
+        }
+
+        .status-paid .status-dot {
+            background: #16865b;
+        }
+
+        .status-partial {
+            background: #fff4e8;
+            color: #d97706;
+        }
+
+        .status-partial .status-dot {
+            background: #d97706;
+        }
+
+        .status-pending {
+            background: #fff0ed;
+            color: #e5532f;
+        }
+
+        .status-pending .status-dot {
+            background: #e5532f;
+        }
+
+        /* ================= MANAGE ================= */
+
+        .manage-btn {
+            background: #172744;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            padding: 8px 13px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .manage-btn:hover {
+            background: #ff7426;
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty-row {
+            text-align: center;
+            padding: 50px !important;
+            color: #8995a6;
+        }
+
+        /* ================= FOOTER ================= */
+
+        .page-footer {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            color: #8a96a8;
+            font-size: 12px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1000px) {
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .topbar {
+                padding: 16px 18px;
+            }
+
+            .admin-label {
+                display: none;
+            }
+
+            .page {
+                padding: 22px 12px 40px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .summary-card {
+                padding: 15px;
+            }
+
+            .summary-value {
+                font-size: 20px;
+            }
+
+            .summary-icon {
+                width: 34px;
+                height: 34px;
+                font-size: 15px;
+            }
+
+            .header-actions {
+                width: 100%;
+            }
+
+            .header-actions .btn {
+                flex: 1;
+            }
+
+            .page-footer {
+                flex-direction: column;
+                gap: 7px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ================= TOP BAR ================= -->
+
+<header class="topbar">
+
+    <div class="brand">
+        <h1>Shubh <span>Classes</span></h1>
+        <p>Fee Management System</p>
+    </div>
+
+    <div class="admin-label">
+        ⚙ ADMIN PANEL
+    </div>
+
+</header>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="page">
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <div class="page-title">
+            <h2>Fee Management</h2>
+            <p>Monitor, manage and update student fee records.</p>
+        </div>
+
+        <div class="header-actions">
+
+            <a href="/admin/dashboard"
+   class="btn btn-dark">
+    ← Dashboard
+</a>
+
+            <button class="btn btn-primary"
+        type="button"
+        onclick="openMonthlyFeeModal()">
+    + Generate Monthly Fee
+</button>
+
+        </div>
+{% if generated %}
+
+<div style="
+    background:#e8f8ef;
+    border:1px solid #b7e4c7;
+    color:#166534;
+    padding:14px 18px;
+    border-radius:10px;
+    margin-bottom:20px;
+    font-weight:700;
+">
+
+    ✅ {{ generated }} fee records generated successfully.
+
+    {% if skipped and skipped != "0" %}
+        <br>
+        ⚠ {{ skipped }} students already had this month's fee.
+    {% endif %}
+
+</div>
+
+{% endif %}
+    </div>
+
+
+    <!-- ================= SUMMARY ================= -->
+
+    {% set total_fee = students | sum(attribute='total_fee') %}
+    {% set total_paid = students | sum(attribute='total_paid') %}
+    {% set total_pending = students | sum(attribute='total_pending') %}
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+
+            <div class="summary-top">
+                <div class="summary-icon">👨‍🎓</div>
+            </div>
+
+            <h4>Total Students</h4>
+
+            <div class="summary-value">
+                {{ students|length }}
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-top">
+                <div class="summary-icon">💰</div>
+            </div>
+
+            <h4>Total Fee</h4>
+
+            <div class="summary-value">
+                ₹{{ "%.2f"|format(total_fee or 0) }}
+            </div>
+
+        </div>
+
+
+        <div class="summary-card collected">
+
+            <div class="summary-top">
+                <div class="summary-icon">✓</div>
+            </div>
+
+            <h4>Collected</h4>
+
+            <div class="summary-value">
+                ₹{{ "%.2f"|format(total_paid or 0) }}
+            </div>
+
+        </div>
+
+
+        <div class="summary-card pending">
+
+            <div class="summary-top">
+                <div class="summary-icon">!</div>
+            </div>
+
+            <h4>Pending</h4>
+
+            <div class="summary-value">
+                ₹{{ "%.2f"|format(total_pending or 0) }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= TOOLBAR ================= -->
+
+    <div class="toolbar">
+
+        <div class="search-box">
+
+            <span class="search-icon">🔍</span>
+
+            <input
+                type="text"
+                id="studentSearch"
+                placeholder="Search student or user ID..."
+                onkeyup="searchStudents()">
+
+        </div>
+
+
+        <div class="filter-group">
+
+            <select class="filter"
+                    id="statusFilter"
+                    onchange="filterStudents()">
+
+                <option value="all">All Status</option>
+                <option value="paid">Paid</option>
+                <option value="partial">Partial</option>
+                <option value="pending">Pending</option>
+
+            </select>
+
+
+            <select class="filter"
+        id="classFilter"
+        onchange="filterStudents()">
+
+    <option value="all">All Classes</option>
+    <option value="9">Class 9</option>
+    <option value="10">Class 10</option>
+    <option value="11">Class 11</option>
+    <option value="12">Class 12</option>
+
+</select>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= TABLE ================= -->
+
+    <div class="table-wrapper">
+
+        <table id="feeTable">
+
+            <thead>
+
+                <tr>
+                    <th>Student</th>
+                    <th>Class</th>
+                    <th>Total Fee</th>
+                    <th>Paid</th>
+                    <th>Pending</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for student in students %}
+
+                <tr
+    data-name="{{ student.name|lower }}"
+    data-id="{{ student.user_id|lower }}"
+    data-class="{{ student.class_name }}"
+    data-status="{% if student.total_pending <= 0 %}paid{% elif student.total_paid > 0 %}partial{% else %}pending{% endif %}"
+>
+
+                    <!-- STUDENT -->
+
+                    <td>
+
+                        <div class="student-info">
+
+                            <div class="student-avatar">
+                                {{ student.name[0]|upper }}
+                            </div>
+
+                            <div>
+
+                                <div class="student-name">
+                                    {{ student.name }}
+                                </div>
+
+                                <div class="student-id">
+                                    {{ student.user_id }}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- CLASS -->
+
+                    <td>
+
+                        <span class="class-badge">
+                            Class {{ student.class_name }}
+                        </span>
+
+                    </td>
+
+
+                    <!-- TOTAL -->
+
+                    <td class="money">
+                        ₹{{ "%.2f"|format(student.total_fee or 0) }}
+                    </td>
+
+
+                    <!-- PAID -->
+
+                    <td class="paid">
+                        ₹{{ "%.2f"|format(student.total_paid or 0) }}
+                    </td>
+
+
+                    <!-- PENDING -->
+
+                    <td class="pending">
+                        ₹{{ "%.2f"|format(student.total_pending or 0) }}
+                    </td>
+
+
+                    <!-- DUE DATE -->
+
+                    <td>
+                        {{ student.due_date or "-" }}
+                    </td>
+
+
+                    <!-- STATUS -->
+
+                    <td>
+
+                        {% if student.total_pending <= 0 %}
+
+                            <span class="status status-paid">
+                                <span class="status-dot"></span>
+                                Paid
+                            </span>
+
+                        {% elif student.total_paid > 0 %}
+
+                            <span class="status status-partial">
+                                <span class="status-dot"></span>
+                                Partial
+                            </span>
+
+                        {% else %}
+
+                            <span class="status status-pending">
+                                <span class="status-dot"></span>
+                                Pending
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- ACTION -->
+
+                    <td>
+
+                        <a
+    href="{{ url_for('manage_student_fee', user_id=student.user_id) }}"
+    class="manage-btn">
+
+    ⚙ Manage
+
+</a>
+
+                    </td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+                    <td colspan="8" class="empty-row">
+                        No student fee records found.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="page-footer">
+
+        <span>
+            Showing {{ students|length }} student(s)
+        </span>
+
+        <span>
+            Shubh Classes • Fee Management
+        </span>
+
+    </div>
+
+</main>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+function searchStudents() {
+    filterStudents();
+}
+
+function filterStudents() {
+
+    const search = (
+        document.getElementById("studentSearch").value || ""
+    ).toLowerCase().trim();
+
+    const statusFilter =
+        document.getElementById("statusFilter").value;
+
+    const classFilter =
+        document.getElementById("classFilter").value;
+
+    const rows =
+        document.querySelectorAll("#feeTable tbody tr");
+
+    rows.forEach(row => {
+
+        const name =
+            (row.dataset.name || "").toLowerCase();
+
+        const id =
+            (row.dataset.id || "").toLowerCase();
+
+        const status =
+            (row.dataset.status || "").toLowerCase();
+
+        const className =
+            (row.dataset.class || "").toString().trim();
+
+        const searchMatch =
+            search === "" ||
+            name.includes(search) ||
+            id.includes(search);
+
+        const statusMatch =
+            statusFilter === "all" ||
+            status === statusFilter;
+
+        const classMatch =
+            classFilter === "all" ||
+            className === classFilter;
+
+        if (searchMatch && statusMatch && classMatch) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+
+    });
+}
+
+
+function manageStudent(userId) {
+    window.location.href = "/admin/fees/manage/" + userId;
+}
+
+</script>
+<!-- GENERATE MONTHLY FEE MODAL -->
+<div id="monthlyFeeModal"
+     style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(15,23,42,0.55);
+        z-index:9999;
+        align-items:center;
+        justify-content:center;
+     ">
+
+    <div style="
+        width:460px;
+        max-width:92%;
+        background:white;
+        border-radius:18px;
+        padding:30px;
+        box-shadow:0 20px 60px rgba(0,0,0,0.25);
+     ">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:8px;
+        ">
+
+            <h2 style="margin:0; color:#172554;">
+                Generate Monthly Fee
+            </h2>
+
+            <button type="button"
+                    onclick="closeMonthlyFeeModal()"
+                    style="
+                        border:0;
+                        background:none;
+                        font-size:24px;
+                        cursor:pointer;
+                        color:#64748b;
+                    ">
+                ×
+            </button>
+
+        </div>
+
+        <p style="
+            margin:0 0 24px;
+            color:#64748b;
+        ">
+            Create the monthly fee for all students at once.
+        </p>
+
+        <form method="POST"
+              action="{{ url_for('generate_monthly_fee') }}">
+ 
+              <!-- SELECT CLASS -->
+<label style="
+    display:block;
+    margin-bottom:7px;
+    font-weight:600;
+    color:#334155;
+">
+    Select Class
+</label>
+
+<select name="class_name"
+        required
+        style="
+            width:100%;
+            box-sizing:border-box;
+            padding:13px;
+            border:1px solid #dbe3ef;
+            border-radius:10px;
+            margin-bottom:18px;
+        ">
+
+    <option value="">Select Class</option>
+<option value="9">Class 9</option>
+<option value="10">Class 10</option>
+<option value="11">Class 11</option>
+<option value="12">Class 12</option>
+
+</select>
+            <!-- FEE TYPE -->
+            <label style="
+                display:block;
+                margin-bottom:7px;
+                font-weight:600;
+                color:#334155;
+            ">
+                Fee Type
+            </label>
+
+            <input type="text"
+                   name="fee_type"
+                   value="Monthly Tuition Fee"
+                   required
+                   style="
+                        width:100%;
+                        box-sizing:border-box;
+                        padding:13px;
+                        border:1px solid #dbe3ef;
+                        border-radius:10px;
+                        margin-bottom:18px;
+                   ">
+
+            <!-- AMOUNT -->
+            <label style="
+                display:block;
+                margin-bottom:7px;
+                font-weight:600;
+                color:#334155;
+            ">
+                Monthly Fee Amount
+            </label>
+
+            <input type="number"
+                   name="amount"
+                   min="1"
+                   step="0.01"
+                   placeholder="e.g. 2000"
+                   required
+                   style="
+                        width:100%;
+                        box-sizing:border-box;
+                        padding:13px;
+                        border:1px solid #dbe3ef;
+                        border-radius:10px;
+                        margin-bottom:18px;
+                   ">
+
+            <!-- DUE DATE -->
+            <label style="
+                display:block;
+                margin-bottom:7px;
+                font-weight:600;
+                color:#334155;
+            ">
+                Due Date
+            </label>
+
+            <input type="date"
+                   name="due_date"
+                   required
+                   style="
+                        width:100%;
+                        box-sizing:border-box;
+                        padding:13px;
+                        border:1px solid #dbe3ef;
+                        border-radius:10px;
+                        margin-bottom:24px;
+                   ">
+
+            <div style="
+                display:flex;
+                gap:10px;
+                justify-content:flex-end;
+            ">
+
+                <button type="button"
+                        onclick="closeMonthlyFeeModal()"
+                        style="
+                            padding:12px 20px;
+                            border:1px solid #dbe3ef;
+                            background:white;
+                            border-radius:10px;
+                            cursor:pointer;
+                            font-weight:600;
+                        ">
+                    Cancel
+                </button>
+
+                <button type="submit"
+                        class="btn btn-primary"
+                        style="
+                            padding:12px 20px;
+                            border:0;
+                            border-radius:10px;
+                            cursor:pointer;
+                            font-weight:600;
+                        ">
+                    Generate for All Students
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+<script>
+
+function openMonthlyFeeModal() {
+    document.getElementById("monthlyFeeModal").style.display = "flex";
+}
+
+function closeMonthlyFeeModal() {
+    document.getElementById("monthlyFeeModal").style.display = "none";
+}
+
+</script>
+</body>
+</html>

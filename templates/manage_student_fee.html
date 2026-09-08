@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Fee - Shubh Classes</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172744;
+        }
+
+        .topbar {
+            background: #172744;
+            color: white;
+            padding: 18px 35px;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .topbar span {
+            color: #ff7426;
+        }
+
+        .topbar p {
+            margin: 5px 0 0;
+            color: #cbd5e1;
+            font-size: 12px;
+        }
+
+        .page {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px 20px 50px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: #172744;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .student-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 22px;
+            box-shadow: 0 5px 20px rgba(23,39,68,.05);
+        }
+
+        .student-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: #172744;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .student-header h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .student-header p {
+            margin: 5px 0 0;
+            color: #718096;
+            font-size: 13px;
+        }
+
+        .student-info {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .info-box {
+            background: #f7f9fc;
+            border-radius: 9px;
+            padding: 14px;
+        }
+
+        .info-box span {
+            display: block;
+            color: #718096;
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        .info-box strong {
+            font-size: 14px;
+        }
+
+        .section {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(23,39,68,.05);
+        }
+
+        .section-header {
+            padding: 20px 22px;
+            border-bottom: 1px solid #e5eaf0;
+        }
+
+        .section-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .section-header p {
+            margin: 5px 0 0;
+            color: #718096;
+            font-size: 12px;
+        }
+
+        .fee-list {
+            padding: 20px;
+            display: grid;
+            gap: 18px;
+        }
+
+        .fee-card {
+            border: 1px solid #e1e7ef;
+            border-radius: 11px;
+            padding: 20px;
+            background: #fcfdff;
+        }
+
+        .fee-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .fee-title {
+            font-weight: 800;
+            font-size: 15px;
+        }
+
+        .fee-date {
+            color: #718096;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .status {
+            padding: 6px 11px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .paid-status {
+            background: #e8f7ef;
+            color: #16865b;
+        }
+
+        .partial-status {
+            background: #fff4e8;
+            color: #d97706;
+        }
+
+        .pending-status {
+            background: #fff0ed;
+            color: #e5532f;
+        }
+
+        .amount-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .amount-box {
+            background: white;
+            border: 1px solid #e5eaf0;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .amount-box span {
+            display: block;
+            color: #718096;
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        .amount-box strong {
+            font-size: 16px;
+        }
+
+        .pending-amount {
+            color: #e5532f;
+        }
+
+        .payment-form {
+            border-top: 1px dashed #d5dce6;
+            padding-top: 18px;
+        }
+
+        .payment-form h4 {
+            margin: 0 0 15px;
+            font-size: 14px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            color: #59677b;
+            margin-bottom: 7px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #d6dee8;
+            border-radius: 8px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .form-group input:focus {
+            border-color: #ff7426;
+        }
+
+        .save-btn {
+            margin-top: 15px;
+            border: none;
+            border-radius: 8px;
+            padding: 11px 18px;
+            background: #ff7426;
+            color: white;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            opacity: .9;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 50px;
+            color: #718096;
+        }
+
+        @media (max-width: 700px) {
+
+            .student-info,
+            .amount-grid,
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .fee-top {
+                align-items: flex-start;
+                gap: 10px;
+                flex-direction: column;
+            }
+
+            .topbar {
+                padding: 18px 20px;
+            }
+
+            .page {
+                padding: 20px 12px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <h1>
+        Shubh <span>Classes</span>
+    </h1>
+
+    <p>
+        Student Fee Management
+    </p>
+
+</header>
+
+
+<main class="page">
+
+    <a
+        href="{{ url_for('admin_fees') }}"
+        class="back-btn">
+
+        ← Back to Fee Management
+
+    </a>
+
+
+    <!-- STUDENT INFORMATION -->
+
+    <div class="student-card">
+
+        <div class="student-header">
+
+            <div class="avatar">
+                {{ student.name[0]|upper }}
+            </div>
+
+            <div>
+
+                <h2>
+                    {{ student.name }}
+                </h2>
+
+                <p>
+                    Fee Management
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="student-info">
+
+            <div class="info-box">
+
+                <span>
+                    STUDENT USER ID
+                </span>
+
+                <strong>
+                    {{ student.user_id }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <span>
+                    CLASS
+                </span>
+
+                <strong>
+                    Class {{ student.class_name }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <span>
+                    COURSE
+                </span>
+
+                <strong>
+                    {{ student.course or "-" }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+<!-- ================= ADD NEW FEE ================= -->
+
+<div class="section add-fee-section">
+
+    <div class="section-header">
+
+        <h3>
+            + Add New Fee
+        </h3>
+
+        <p>
+            Create a new fee record for this student.
+        </p>
+
+    </div>
+
+    <div style="padding: 20px;">
+
+        <form
+            method="POST"
+            action="{{ url_for('add_student_fee_from_manage', user_id=student.user_id) }}">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label>
+                        FEE TYPE
+                    </label>
+
+                    <select
+                        name="fee_type"
+                        required
+                        style="
+                            width:100%;
+                            padding:11px 12px;
+                            border:1px solid #d6dee8;
+                            border-radius:8px;
+                            outline:none;
+                            font-size:13px;
+                        ">
+
+                        <option value="">
+                            Select Fee Type
+                        </option>
+
+                        <option value="Monthly Tuition Fee">
+                            Monthly Tuition Fee
+                        </option>
+
+                        <option value="Admission Fee">
+                            Admission Fee
+                        </option>
+
+                        <option value="Exam Fee">
+                            Exam Fee
+                        </option>
+
+                        <option value="Other Fee">
+                            Other Fee
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        FEE AMOUNT
+                    </label>
+
+                    <input
+                        type="number"
+                        name="amount"
+                        step="0.01"
+                        min="1"
+                        placeholder="Enter amount"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        DUE DATE
+                    </label>
+
+                    <input
+                        type="date"
+                        name="due_date"
+                        required>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="save-btn">
+
+                + Create Fee
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+    <!-- FEE RECORDS -->
+
+    <div class="section">
+
+        <div class="section-header">
+
+            <h3>
+                Fee Records
+            </h3>
+
+            <p>
+                View and update this student's fee payments.
+            </p>
+
+        </div>
+
+
+        <div class="fee-list">
+
+            {% for fee in fees %}
+
+            <div class="fee-card">
+
+                <div class="fee-top">
+
+                    <div>
+
+                        <div class="fee-title">
+                            {{ fee.fee_type }}
+                        </div>
+
+                        <div class="fee-date">
+                            Due Date:
+                            {{ fee.due_date or "-" }}
+                        </div>
+
+                    </div>
+
+
+                    {% if fee.status == "Paid" %}
+
+                    <span class="status paid-status">
+                        Paid
+                    </span>
+
+                    {% elif fee.status == "Partial" %}
+
+                    <span class="status partial-status">
+                        Partial
+                    </span>
+
+                    {% else %}
+
+                    <span class="status pending-status">
+                        Pending
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- AMOUNTS -->
+
+                <div class="amount-grid">
+
+                    <div class="amount-box">
+
+                        <span>
+                            TOTAL FEE
+                        </span>
+
+                        <strong>
+                            ₹{{ "%.2f"|format(fee.amount or 0) }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="amount-box">
+
+                        <span>
+                            PAID
+                        </span>
+
+                        <strong>
+                            ₹{{ "%.2f"|format(fee.paid_amount or 0) }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="amount-box">
+
+                        <span>
+                            PENDING
+                        </span>
+
+                        <strong class="pending-amount">
+
+                            ₹{{
+                                "%.2f"|format(
+                                    (fee.amount or 0)
+                                    -
+                                    (fee.paid_amount or 0)
+                                )
+                            }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+<!-- ================= CASH PAYMENT ================= -->
+
+<div class="section" style="margin-bottom: 22px;">
+
+    <div class="section-header">
+
+        <h3>
+            💵 Record Cash Payment
+        </h3>
+
+        <p>
+            Record cash received from this student.
+        </p>
+
+    </div>
+
+    <div style="padding: 20px;">
+
+        {% for fee in fees %}
+
+            {% set remaining =
+                (fee.amount or 0) - (fee.paid_amount or 0)
+            %}
+
+            {% if remaining > 0 %}
+
+            <div
+                style="
+                    border:1px solid #e1e7ef;
+                    border-radius:11px;
+                    padding:20px;
+                    margin-bottom:15px;
+                    background:#fcfdff;
+                ">
+
+                <div
+                    style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                        margin-bottom:18px;
+                    ">
+
+                    <div>
+
+                        <strong>
+                            {{ fee.fee_type }}
+                        </strong>
+
+                        <div
+                            style="
+                                color:#718096;
+                                font-size:12px;
+                                margin-top:5px;
+                            ">
+
+                            Remaining Fee:
+                            <strong style="color:#e5532f;">
+                                ₹{{ "%.2f"|format(remaining) }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for(
+                        'record_cash_payment',
+                        user_id=student.user_id
+                    ) }}">
+
+                    <input
+                        type="hidden"
+                        name="fee_id"
+                        value="{{ fee.id }}">
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>
+                                CASH RECEIVED
+                            </label>
+
+                            <input
+                                type="number"
+                                name="cash_amount"
+                                step="0.01"
+                                min="0.01"
+                                max="{{ remaining }}"
+                                placeholder="Enter cash amount"
+                                required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                PAYMENT DATE
+                            </label>
+
+                            <input
+                                type="date"
+                                name="payment_date"
+                                value="{{ current_date }}"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="save-btn">
+
+                        💵 Record Cash Payment
+
+                    </button>
+
+                </form>
+
+            </div>
+
+            {% endif %}
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+                <!-- UPDATE -->
+
+                <form
+                    method="POST"
+                    class="payment-form">
+
+                    <h4>
+                        💵 Record / Update Payment
+                    </h4>
+
+                    <input
+                        type="hidden"
+                        name="fee_id"
+                        value="{{ fee.id }}">
+
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label>
+                                TOTAL PAID AMOUNT
+                            </label>
+
+                            <input
+                                type="number"
+                                name="paid_amount"
+                                step="0.01"
+                                min="0"
+                                max="{{ fee.amount }}"
+                                value="{{ fee.paid_amount or 0 }}"
+                                required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                PAYMENT DATE
+                            </label>
+
+                            <input
+                                type="date"
+                                name="payment_date"
+                                value="{{ fee.payment_date or '' }}">
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="save-btn">
+
+                        Save Payment
+
+                    </button>
+
+                </form>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+
+                No fee records found for this student.
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+</html>

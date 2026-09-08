@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Student Fee - Shubh Classes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172554;
+        }
+
+        .fee-page {
+            min-height: 100vh;
+            padding: 45px 7%;
+        }
+
+        .fee-header {
+            margin-bottom: 30px;
+        }
+
+        .fee-header .small-title {
+            color: #ff7a2f;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .fee-header h1 {
+            margin: 7px 0;
+            font-size: 36px;
+            font-weight: 800;
+            color: #172554;
+        }
+
+        .fee-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .fee-card {
+            max-width: 850px;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.09);
+            border: 1px solid #e8edf5;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid #edf1f6;
+        }
+
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 15px;
+            background: #fff1e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .card-title h2 {
+            margin: 0;
+            font-size: 22px;
+            color: #172554;
+        }
+
+        .card-title p {
+            margin: 4px 0 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .fee-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            height: 48px;
+            padding: 0 14px;
+            border: 1px solid #dbe2ea;
+            border-radius: 11px;
+            background: #f8fafc;
+            color: #172554;
+            font-size: 14px;
+            outline: none;
+            transition: .2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            background: #ffffff;
+            border-color: #ff7a2f;
+            box-shadow: 0 0 0 4px rgba(255, 122, 47, 0.10);
+        }
+
+        .amount-box {
+            position: relative;
+        }
+
+        .amount-box span {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: 700;
+            color: #64748b;
+            pointer-events: none;
+        }
+
+        .amount-box input {
+            padding-left: 32px;
+        }
+
+        .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 8px;
+            padding-top: 25px;
+            border-top: 1px solid #edf1f6;
+        }
+
+        .save-btn {
+            border: none;
+            padding: 13px 27px;
+            border-radius: 11px;
+            background: #ff7a2f;
+            color: white;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 122, 47, 0.22);
+            transition: .2s;
+        }
+
+        .save-btn:hover {
+            background: #f36b20;
+            transform: translateY(-1px);
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 22px;
+            color: #475569;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .back-btn:hover {
+            color: #ff7a2f;
+        }
+
+        @media (max-width: 700px) {
+            .fee-page {
+                padding: 25px 16px;
+            }
+
+            .fee-card {
+                padding: 22px;
+            }
+
+            .fee-form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .form-actions {
+                grid-column: auto;
+            }
+
+            .fee-header h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="fee-page">
+
+    <div class="fee-header">
+        <div class="small-title">Fee Management</div>
+        <h1>Add Student Fee</h1>
+        <p>Create and manage a student's fee record.</p>
+    </div>
+
+    <div class="fee-card">
+
+        <div class="card-title">
+            <div class="card-icon">💳</div>
+
+            <div>
+                <h2>Fee Information</h2>
+                <p>Enter the student's payment and fee details below.</p>
+            </div>
+        </div>
+
+        <form method="POST" action="/admin/add-fee" class="fee-form">
+
+            <div class="form-group">
+                <label>Student User ID</label>
+                <input
+                    type="text"
+                    name="student_user_id"
+                    placeholder="e.g. STU001"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Fee Type</label>
+                <input
+                    type="text"
+                    name="fee_type"
+                    placeholder="e.g. Monthly Tuition Fee"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Total Amount</label>
+
+                <div class="amount-box">
+                    <span>₹</span>
+                    <input
+                        type="number"
+                        name="amount"
+                        step="0.01"
+                        min="0"
+                        required
+                    >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Paid Amount</label>
+
+                <div class="amount-box">
+                    <span>₹</span>
+                    <input
+                        type="number"
+                        name="paid_amount"
+                        step="0.01"
+                        min="0"
+                        value="0"
+                    >
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Due Date</label>
+
+                <input
+                    type="date"
+                    name="due_date"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+
+                <select name="status">
+                    <option value="Pending">Pending</option>
+                    <option value="Partial">Partial</option>
+                    <option value="Paid">Paid</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Payment Date</label>
+
+                <input
+                    type="date"
+                    name="payment_date"
+                >
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="save-btn">
+                    Save Fee →
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+    <a href="{{ url_for('admin_dashboard') }}" class="back-btn">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

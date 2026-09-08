@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Notes - Shubh Classes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .note-actions {
+    display: flex;
+    align-items: center;
+}
+
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 13px;
+    border-radius: 9px;
+    background: #172744;
+    color: white;
+    text-decoration: none;
+    font-size: 11px;
+    font-weight: 800;
+    transition: .2s ease;
+}
+
+.download-btn:hover {
+    background: #ff7428;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 116, 40, .20);
+}
+
+.no-pdf {
+    color: #a0a8b6;
+    font-size: 11px;
+    font-weight: 700;
+}
+        .notes-page {
+            min-height: 100vh;
+            background: #f5f7fb;
+            padding: 42px;
+            box-sizing: border-box;
+        }
+
+        .notes-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .notes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .notes-label {
+            color: #ff7428;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .notes-header h1 {
+            margin: 7px 0 0;
+            color: #172744;
+            font-size: 38px;
+            font-weight: 800;
+        }
+
+        .notes-header p {
+            margin: 8px 0 0;
+            color: #7c879a;
+            font-size: 14px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #172744;
+            color: white;
+            padding: 12px 19px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: .2s;
+        }
+
+        .back-btn:hover {
+            background: #ff7428;
+            transform: translateY(-2px);
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .note-card {
+            background: white;
+            border: 1px solid #e7ebf1;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(23, 39, 68, .06);
+            transition: .2s ease;
+        }
+
+        .note-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 35px rgba(23, 39, 68, .10);
+        }
+
+        .note-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .note-icon {
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            border-radius: 14px;
+            background: #fff1e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .note-top h2 {
+            margin: 0;
+            color: #172744;
+            font-size: 20px;
+        }
+
+        .subject-badge {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 5px 9px;
+            border-radius: 7px;
+            background: #eef3ff;
+            color: #3157a6;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .note-description {
+            color: #66738a;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .content-box {
+            background: #f8f9fc;
+            border: 1px solid #e8ebf1;
+            border-radius: 13px;
+            padding: 17px;
+        }
+
+        .content-label {
+            display: block;
+            color: #8993a5;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            margin-bottom: 8px;
+        }
+
+        .note-content {
+            color: #34425c;
+            font-size: 13px;
+            line-height: 1.7;
+            white-space: pre-line;
+        }
+
+        .note-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 18px;
+            padding-top: 15px;
+            border-top: 1px solid #edf0f4;
+        }
+
+        .teacher-info {
+            color: #8993a5;
+            font-size: 11px;
+        }
+
+        .teacher-info strong {
+            color: #172744;
+        }
+
+        .read-btn {
+            padding: 8px 13px;
+            border-radius: 8px;
+            background: #172744;
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .empty-notes {
+            background: white;
+            border: 1px solid #e7ebf1;
+            border-radius: 20px;
+            padding: 65px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(23, 39, 68, .06);
+        }
+
+        .empty-icon {
+            font-size: 50px;
+            margin-bottom: 12px;
+        }
+
+        .empty-notes h2 {
+            margin: 0;
+            color: #172744;
+        }
+
+        .empty-notes p {
+            color: #8993a5;
+            font-size: 14px;
+        }
+
+        .notes-footer {
+            margin-top: 25px;
+        }
+
+        @media (max-width: 800px) {
+            .notes-page {
+                padding: 28px 16px;
+            }
+
+            .notes-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .notes-header h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="notes-page">
+
+    <div class="notes-container">
+
+        <!-- HEADER -->
+        <div class="notes-header">
+
+            <div>
+                <div class="notes-label">STUDENT PORTAL</div>
+
+                <h1>My Notes</h1>
+
+                <p>
+                    Access your study materials and class notes.
+                </p>
+            </div>
+
+            <a href={{ url_for('student_dashboard', user_id=user_id) }}
+               class="back-btn">
+                ← Dashboard
+            </a>
+
+        </div>
+
+
+        {% if notes %}
+
+        <!-- NOTES -->
+        <div class="notes-grid">
+
+            {% for note in notes %}
+
+            <div class="note-card">
+
+                <div class="note-top">
+
+                    <div class="note-icon">
+                        📝
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            {{ note.title }}
+                        </h2>
+
+                        <span class="subject-badge">
+                            {{ note.subject }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="note-description">
+                    {{ note.description }}
+                </div>
+
+
+                <div class="content-box">
+
+                    <span class="content-label">
+                        Study Notes
+                    </span>
+
+                    <div class="note-content">
+                        {{ note.content }}
+                    </div>
+
+                </div>
+
+
+                <div class="note-footer">
+
+    <div class="teacher-info">
+        Uploaded by
+        <strong>
+            {{ note.teacher_user_id }}
+        </strong>
+    </div>
+
+    <div class="note-actions">
+
+        {% if note.pdf_file %}
+
+            <a href="{{ url_for('download_note', filename=note.pdf_file) }}"
+               class="download-btn">
+                📄 Download PDF
+            </a>
+
+        {% else %}
+
+            <span class="no-pdf">
+                No PDF attached
+            </span>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <!-- EMPTY -->
+        <div class="empty-notes">
+
+            <div class="empty-icon">
+                📚
+            </div>
+
+            <h2>
+                No Notes Available
+            </h2>
+
+            <p>
+                Your teachers haven't uploaded any study materials yet.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="notes-footer">
+
+            <a href={{ url_for('student_dashboard', user_id=user_id) }}
+               class="back-btn">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

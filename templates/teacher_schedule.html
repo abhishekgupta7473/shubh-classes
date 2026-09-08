@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Teacher Schedule - Shubh Classes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .schedule-page {
+            min-height: 100vh;
+            background: #f5f7fb;
+            padding: 42px;
+            box-sizing: border-box;
+        }
+
+        .schedule-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .schedule-label {
+            color: #ff7428;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .schedule-header h1 {
+            margin: 7px 0 0;
+            color: #172744;
+            font-size: 38px;
+            font-weight: 800;
+        }
+
+        .schedule-header p {
+            margin: 8px 0 0;
+            color: #7c879a;
+            font-size: 14px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #172744;
+            color: white;
+            padding: 12px 19px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: .2s;
+        }
+
+        .back-btn:hover {
+            background: #ff7428;
+            transform: translateY(-2px);
+        }
+
+        .schedule-card {
+            background: white;
+            border: 1px solid #e7ebf1;
+            border-radius: 21px;
+            padding: 28px;
+            box-shadow: 0 12px 32px rgba(23, 39, 68, .07);
+        }
+
+        .schedule-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .schedule-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 15px;
+            background: #fff1e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .schedule-card-header h2 {
+            margin: 0;
+            color: #172744;
+            font-size: 21px;
+        }
+
+        .schedule-card-header p {
+            margin: 5px 0 0;
+            color: #8993a5;
+            font-size: 13px;
+        }
+
+        .schedule-table-wrapper {
+            overflow-x: auto;
+            border: 1px solid #e6eaf0;
+            border-radius: 14px;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        .schedule-table th {
+            background: #172744;
+            color: white;
+            padding: 15px 16px;
+            text-align: left;
+            font-size: 12px;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+        }
+
+        .schedule-table td {
+            padding: 17px 16px;
+            border-bottom: 1px solid #edf0f4;
+            color: #4d5b72;
+            font-size: 14px;
+        }
+
+        .schedule-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .schedule-table tbody tr {
+            transition: .2s;
+        }
+
+        .schedule-table tbody tr:hover {
+            background: #fafbfc;
+        }
+
+        .day-badge {
+            display: inline-block;
+            padding: 7px 11px;
+            border-radius: 8px;
+            background: #fff1e8;
+            color: #e76520;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .time-cell {
+            color: #172744 !important;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .class-badge {
+            display: inline-block;
+            padding: 7px 11px;
+            border-radius: 8px;
+            background: #eef3ff;
+            color: #3157a6;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .subject-name {
+            color: #172744;
+            font-weight: 700;
+        }
+
+        .room-name {
+            color: #758197;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h2 {
+            margin: 0;
+            color: #172744;
+        }
+
+        .empty-state p {
+            margin: 8px 0 0;
+            color: #8993a5;
+            font-size: 14px;
+        }
+
+        .schedule-footer {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .logout-btn {
+            text-decoration: none;
+            padding: 11px 18px;
+            border-radius: 10px;
+            background: #fff0f1;
+            color: #d64545;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .logout-btn:hover {
+            background: #ffe1e3;
+        }
+
+        @media (max-width: 700px) {
+            .schedule-page {
+                padding: 25px 15px;
+            }
+
+            .schedule-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .schedule-header h1 {
+                font-size: 30px;
+            }
+
+            .schedule-card {
+                padding: 20px;
+            }
+
+            .schedule-footer {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="schedule-page">
+
+    <div class="schedule-container">
+
+        <!-- HEADER -->
+        <div class="schedule-header">
+
+            <div>
+                <div class="schedule-label">TEACHER PANEL</div>
+
+                <h1>My Schedule</h1>
+
+                <p>
+                    View your classes, subjects and teaching timings.
+                </p>
+            </div>
+
+            <a href="{{ url_for('teacher_dashboard') }}"
+               class="back-btn">
+                ← Dashboard
+            </a>
+
+        </div>
+
+
+        <!-- SCHEDULE -->
+        <div class="schedule-card">
+
+            <div class="schedule-card-header">
+
+                <div class="schedule-icon">
+                    🗓️
+                </div>
+
+                <div>
+                    <h2>Teaching Timetable</h2>
+
+                    <p>
+                        Your scheduled classes and daily teaching sessions.
+                    </p>
+                </div>
+
+            </div>
+
+
+            {% if schedule %}
+
+            <div class="schedule-table-wrapper">
+
+                <table class="schedule-table">
+
+                    <thead>
+                        <tr>
+                            <th>Day</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Class</th>
+                            <th>Subject</th>
+                            <th>Room</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for item in schedule %}
+
+                        <tr>
+
+                            <td>
+                                <span class="day-badge">
+                                    {{ item.day_name }}
+                                </span>
+                            </td>
+
+                            <td class="time-cell">
+                                {{ item.start_time }}
+                            </td>
+
+                            <td class="time-cell">
+                                {{ item.end_time }}
+                            </td>
+
+                            <td>
+                                <span class="class-badge">
+                                    {{ item.class_name }}
+                                </span>
+                            </td>
+
+                            <td class="subject-name">
+                                {{ item.subject }}
+                            </td>
+
+                            <td class="room-name">
+                                {{ item.room }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    🗓️
+                </div>
+
+                <h2>No Schedule Available</h2>
+
+                <p>
+                    Your teaching timetable has not been added yet.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- FOOTER ACTIONS -->
+        <div class="schedule-footer">
+
+            <a href="{{ url_for('teacher_dashboard') }}"
+               class="back-btn">
+                ← Back to Dashboard
+            </a>
+
+            
+            
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

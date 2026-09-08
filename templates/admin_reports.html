@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Reports - Shubh Classes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172554;
+        }
+
+        .reports-page {
+            min-height: 100vh;
+            padding: 45px 6%;
+        }
+
+        .reports-header {
+            margin-bottom: 32px;
+        }
+
+        .reports-label {
+            color: #ff7a2f;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .reports-header h1 {
+            margin: 6px 0;
+            font-size: 38px;
+            color: #172554;
+        }
+
+        .reports-header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .reports-card {
+            background: #ffffff;
+            border: 1px solid #e6ebf2;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .card-heading {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid #edf1f6;
+            margin-bottom: 25px;
+        }
+
+        .report-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 15px;
+            background: #fff1e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .card-heading h2 {
+            margin: 0;
+            font-size: 22px;
+            color: #172554;
+        }
+
+        .card-heading p {
+            margin: 4px 0 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .stat-box {
+            background: #f8fafc;
+            border: 1px solid #e8edf3;
+            border-radius: 17px;
+            padding: 22px;
+            transition: .2s;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.07);
+        }
+
+        .stat-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .stat-box p {
+            margin: 17px 0 6px;
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .stat-box h3 {
+            margin: 0;
+            font-size: 28px;
+            color: #172554;
+        }
+
+        .finance-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .finance-box {
+            padding: 24px;
+            border-radius: 18px;
+            background: #f8fafc;
+            border: 1px solid #e8edf3;
+        }
+
+        .finance-box span {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .finance-box h3 {
+            margin: 9px 0 0;
+            font-size: 27px;
+            color: #172554;
+        }
+
+        .finance-box.total {
+            border-left: 5px solid #172554;
+        }
+
+        .finance-box.paid {
+            border-left: 5px solid #22c55e;
+        }
+
+        .finance-box.pending {
+            border-left: 5px solid #ff7a2f;
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .action-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            transition: .2s;
+        }
+
+        .primary-btn {
+            background: #172554;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: #1e3a8a;
+            transform: translateY(-1px);
+        }
+
+        .logout-btn {
+            background: #fff1e8;
+            color: #ea580c;
+        }
+
+        .logout-btn:hover {
+            background: #ffeadb;
+        }
+
+        @media (max-width: 950px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .finance-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .reports-page {
+                padding: 25px 16px;
+            }
+
+            .reports-card {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reports-header h1 {
+                font-size: 30px;
+            }
+
+            .report-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="reports-page">
+
+    <div class="reports-header">
+        <div class="reports-label">Administration</div>
+
+        <h1>Reports</h1>
+
+        <p>
+            Overview of students, teachers, attendance, results and fee collection.
+        </p>
+    </div>
+
+
+    <!-- ACADEMIC REPORTS -->
+
+    <div class="reports-card">
+
+        <div class="card-heading">
+
+            <div class="report-icon">
+                📊
+            </div>
+
+            <div>
+                <h2>Academic Overview</h2>
+                <p>Current records across your institute</p>
+            </div>
+
+        </div>
+
+
+        <div class="stats-grid">
+
+            <div class="stat-box">
+
+                <div class="stat-top">
+                    <div>
+                        <p>Total Students</p>
+                        <h3>{{ total_students }}</h3>
+                    </div>
+
+                    <div class="stat-icon">
+                        🎓
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="stat-box">
+
+                <div class="stat-top">
+                    <div>
+                        <p>Total Teachers</p>
+                        <h3>{{ total_teachers }}</h3>
+                    </div>
+
+                    <div class="stat-icon">
+                        👨‍🏫
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="stat-box">
+
+                <div class="stat-top">
+                    <div>
+                        <p>Attendance Records</p>
+                        <h3>{{ total_attendance }}</h3>
+                    </div>
+
+                    <div class="stat-icon">
+                        📅
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="stat-box">
+
+                <div class="stat-top">
+                    <div>
+                        <p>Result Records</p>
+                        <h3>{{ total_results }}</h3>
+                    </div>
+
+                    <div class="stat-icon">
+                        📈
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FEE REPORT -->
+
+    <div class="reports-card">
+
+        <div class="card-heading">
+
+            <div class="report-icon">
+                💰
+            </div>
+
+            <div>
+                <h2>Fee Collection</h2>
+                <p>Financial overview of student fees</p>
+            </div>
+
+        </div>
+
+
+        <div class="finance-grid">
+
+            <div class="finance-box total">
+                <span>Total Fees</span>
+                <h3>₹{{ total_fees }}</h3>
+            </div>
+
+
+            <div class="finance-box paid">
+                <span>Paid Fees</span>
+                <h3>₹{{ paid_fees }}</h3>
+            </div>
+
+
+            <div class="finance-box pending">
+                <span>Pending Fees</span>
+                <h3>₹{{ pending_fees }}</h3>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTIONS -->
+
+    <div class="report-actions">
+
+        <a href="{{ url_for('admin_dashboard') }}"
+           class="action-btn primary-btn">
+            ← Back to Dashboard
+        </a>
+
+        <a href="{{ url_for('logout') }}"
+           class="action-btn logout-btn">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

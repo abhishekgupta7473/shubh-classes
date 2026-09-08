@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Timetable - Shubh Classes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+          <style>
+    .success-message {
+        background: #ecfdf5;
+        border: 1px solid #a7f3d0;
+        color: #047857;
+        padding: 13px 15px;
+        border-radius: 10px;
+        margin-bottom: 22px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+</style>
+</head>
+
+<body class="admin-page">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">🎓</div>
+
+            <div>
+                <h2>Shubh Classes</h2>
+                <span>Admin Panel</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('admin_dashboard') }}">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('admin_classes') }}">
+                <span>▣</span>
+                Classes
+            </a>
+
+            <a href="{{ url_for('add_timetable') }}" class="active">
+                <span>▦</span>
+                Timetable
+            </a>
+
+            <a href="{{ url_for('teachers') }}">
+                <span>♟</span>
+                Teachers
+            </a>
+
+            <a href="{{ url_for('students') }}">
+                <span>♙</span>
+                Students
+            </a>
+
+            <a href="#">
+                <span>✓</span>
+                Attendance
+            </a>
+
+            <a href="#">
+                <span>₹</span>
+                Fees
+            </a>
+
+            <a href="{{ url_for('admin_reports') }}">
+                <span>▥</span>
+                Reports
+            </a>
+
+            <a href="#">
+                <span>♙</span>
+                Profile
+            </a>
+
+            <a href="{{ url_for('logout') }}">
+                <span>↪</span>
+                Logout
+            </a>
+
+        </nav>
+
+        <div class="sidebar-welcome">
+            <p>Welcome back,</p>
+            <h3>Admin</h3>
+            <p>Keep up the great work!</p>
+        </div>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div></div>
+
+            <div class="admin-user">
+                <div class="admin-avatar">●</div>
+
+                <div>
+                    <strong>Admin</strong>
+                    <small>Administrator</small>
+                </div>
+            </div>
+        </header>
+
+
+        <section class="page-content">
+
+            <div class="page-heading">
+
+                <div>
+                    <h1>Add Timetable</h1>
+
+                    <p class="breadcrumb">
+                        Dashboard
+                        <span>›</span>
+                        Timetable
+                        <span>›</span>
+                        <strong>Add Timetable</strong>
+                    </p>
+                </div>
+
+            </div>
+
+            {% if success %}
+    <div class="success-message" id="successMessage">
+        {{ success }}
+    </div>
+{% endif %}
+
+
+            <!-- Timetable Card -->
+            <div class="form-card premium-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-icon">
+                        ▦
+                    </div>
+
+                    <div>
+                        <h2>Timetable Details</h2>
+                        <p>
+                            Fill in the details below to add a new timetable
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="orange-line"></div>
+
+
+                <form method="POST"
+                      action="/admin/add-timetable">
+
+                    <div class="form-grid">
+
+                        <!-- Class -->
+                        <div class="form-group">
+
+                            <label>Class</label>
+
+                            <input
+                                type="text"
+                                name="class_name"
+                                placeholder="e.g. Class 10"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Day -->
+                        <div class="form-group">
+
+                            <label>Day</label>
+
+                            <select name="day_name" required>
+
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Subject -->
+                        <div class="form-group">
+
+                            <label>Subject</label>
+
+                            <input
+                                type="text"
+                                name="subject"
+                                placeholder="e.g. Mathematics"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Start Time -->
+                        <div class="form-group">
+
+                            <label>Start Time</label>
+
+                            <input
+                                type="time"
+                                name="start_time"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- End Time -->
+                        <div class="form-group">
+
+                            <label>End Time</label>
+
+                            <input
+                                type="time"
+                                name="end_time"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Teacher -->
+                        <div class="form-group">
+
+                            <label>Teacher User ID</label>
+
+                            <input
+                                type="text"
+                                name="teacher_user_id"
+                                placeholder="e.g. TCH001"
+                            >
+
+                        </div>
+
+
+                        <!-- Room -->
+                        <div class="form-group">
+
+                            <label>Room</label>
+
+                            <input
+                                type="text"
+                                name="room"
+                                placeholder="e.g. Room 101"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-actions">
+
+                        <button
+                            type="reset"
+                            class="btn-secondary">
+                            ✕ &nbsp; Reset
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="btn-primary">
+                            ▣ &nbsp; Save Timetable
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

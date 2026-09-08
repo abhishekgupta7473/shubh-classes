@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Shubh Classes - Login</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #172554;
+            overflow-x: hidden;
+        }
+
+        /* BACKGROUND */
+        .page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            position: relative;
+        }
+
+        .shape {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .shape-one {
+            width: 480px;
+            height: 480px;
+            background: #172554;
+            left: -260px;
+            top: -220px;
+        }
+
+        .shape-two {
+            width: 420px;
+            height: 420px;
+            background: #ff7426;
+            right: -230px;
+            bottom: -230px;
+        }
+
+        .shape-three {
+            width: 130px;
+            height: 130px;
+            background: #e8edf6;
+            right: 13%;
+            top: 9%;
+        }
+
+        .shape-four {
+            width: 70px;
+            height: 70px;
+            background: #ffe3d3;
+            left: 12%;
+            bottom: 13%;
+        }
+
+        /* MAIN CONTAINER */
+        .login-wrapper {
+            width: 1000px;
+            max-width: 100%;
+            min-height: 610px;
+            display: grid;
+            grid-template-columns: 1fr 430px;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 30px 80px rgba(15, 23, 42, 0.15);
+            border: 1px solid #e5e7eb;
+        }
+
+        /* LEFT SIDE */
+        .login-info {
+            background: #172554;
+            color: white;
+            padding: 55px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .info-top {
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 65px;
+        }
+
+        .brand-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 15px;
+            background: #ff7426;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .brand-name {
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand-subtitle {
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            color: #cbd5e1;
+            margin-top: 3px;
+        }
+
+        .info-title {
+            font-size: 42px;
+            line-height: 1.12;
+            max-width: 430px;
+            margin-bottom: 18px;
+        }
+
+        .info-title span {
+            color: #ff8a4c;
+        }
+
+        .info-text {
+            max-width: 420px;
+            color: #cbd5e1;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .features {
+            display: flex;
+            gap: 12px;
+            margin-top: 35px;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.10);
+            color: #e2e8f0;
+            font-size: 12px;
+        }
+
+        .info-bottom {
+            position: relative;
+            z-index: 2;
+            color: #94a3b8;
+            font-size: 12px;
+        }
+
+        /* DECORATION INSIDE LEFT */
+        .info-circle-one {
+            position: absolute;
+            width: 330px;
+            height: 330px;
+            border-radius: 50%;
+            right: -190px;
+            top: -150px;
+            background: rgba(255,116,38,0.16);
+        }
+
+        .info-circle-two {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            right: -120px;
+            bottom: -140px;
+            background: rgba(255,255,255,0.06);
+        }
+
+        /* RIGHT SIDE */
+        .login-panel {
+            padding: 52px 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-heading {
+            margin-bottom: 28px;
+        }
+
+        .login-heading h2 {
+            font-size: 29px;
+            margin-bottom: 7px;
+            color: #172554;
+        }
+
+        .login-heading p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* ERROR */
+        .error-box {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            padding: 11px 13px;
+            font-size: 13px;
+            margin-bottom: 18px;
+        }
+
+        /* FORM */
+        .form-group {
+            margin-bottom: 19px;
+        }
+
+        label {
+            display: block;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 17px;
+            pointer-events: none;
+        }
+
+        select,
+        input {
+            width: 100%;
+            height: 50px;
+            padding: 0 14px 0 43px;
+            border: 1px solid #dbe2ea;
+            border-radius: 11px;
+            background: #f8fafc;
+            color: #172554;
+            font-size: 14px;
+            outline: none;
+            transition: .2s;
+        }
+
+        select {
+            padding-left: 14px;
+            cursor: pointer;
+        }
+
+        select:focus,
+        input:focus {
+            background: white;
+            border-color: #ff7426;
+            box-shadow: 0 0 0 3px rgba(255,116,38,0.11);
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* BUTTON */
+        .login-btn {
+            width: 100%;
+            height: 51px;
+            border: none;
+            border-radius: 11px;
+            background: #ff7426;
+            color: white;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .2s;
+            margin-top: 5px;
+        }
+
+        .login-btn:hover {
+            background: #ea641b;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255,116,38,0.25);
+        }
+
+        /* FORGOT */
+        .forgot {
+            text-align: center;
+            margin-top: 21px;
+        }
+
+        .forgot a {
+            color: #172554;
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .forgot a:hover {
+            color: #ff7426;
+        }
+
+        .security {
+            margin-top: 27px;
+            padding-top: 18px;
+            border-top: 1px solid #eef2f7;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 850px) {
+
+            .page {
+                padding: 20px;
+            }
+
+            .login-wrapper {
+                grid-template-columns: 1fr;
+                max-width: 470px;
+            }
+
+            .login-info {
+                min-height: 270px;
+                padding: 32px;
+            }
+
+            .brand {
+                margin-bottom: 30px;
+            }
+
+            .info-title {
+                font-size: 30px;
+            }
+
+            .info-bottom {
+                display: none;
+            }
+
+            .login-panel {
+                padding: 35px 30px;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .page {
+                padding: 12px;
+            }
+
+            .login-wrapper {
+                border-radius: 20px;
+            }
+
+            .login-info {
+                padding: 27px;
+            }
+
+            .login-panel {
+                padding: 30px 22px;
+            }
+
+            .info-title {
+                font-size: 27px;
+            }
+
+            .features {
+                margin-top: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="shape shape-one"></div>
+    <div class="shape shape-two"></div>
+    <div class="shape shape-three"></div>
+    <div class="shape shape-four"></div>
+
+    <div class="login-wrapper">
+
+        <!-- LEFT BRANDING -->
+        <div class="login-info">
+
+            <div class="info-circle-one"></div>
+            <div class="info-circle-two"></div>
+
+            <div class="info-top">
+
+                <div class="brand">
+
+                    <div class="brand-icon">
+                        🎓
+                    </div>
+
+                    <div>
+                        <div class="brand-name">
+                            Shubh Classes
+                        </div>
+
+                        <div class="brand-subtitle">
+                            STUDENT PORTAL
+                        </div>
+                    </div>
+
+                </div>
+
+                <h1 class="info-title">
+                    Learn. Grow.
+                    <span>Succeed.</span>
+                </h1>
+
+                <p class="info-text">
+                    Your complete coaching management portal.
+                    Access classes, attendance, results, fees and
+                    learning resources from one place.
+                </p>
+
+                <div class="features">
+
+                    <div class="feature">
+                        📚 Classes
+                    </div>
+
+                    <div class="feature">
+                        📊 Results
+                    </div>
+
+                    <div class="feature">
+                        📝 Notes
+                    </div>
+
+                    <div class="feature">
+                        📅 Timetable
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="info-bottom">
+                © 2026 Shubh Classes · Your learning journey starts here.
+            </div>
+
+        </div>
+
+        <!-- LOGIN -->
+        <div class="login-panel">
+
+            <div class="login-heading">
+
+                <h2>Welcome Back 👋</h2>
+
+                <p>
+                    Sign in to continue to your portal.
+                </p>
+
+            </div>
+
+            <form method="POST" action="/login">
+
+                {% if error %}
+                    <div class="error-box">
+                        {{ error }}
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+
+                    <label for="role">
+                        Login As
+                    </label>
+
+                    <select id="role" name="role">
+
+                        <option value="student">
+                            Student
+                        </option>
+
+                        <option value="teacher">
+                            Teacher
+                        </option>
+
+                        <option value="admin">
+                            Admin
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="user_id">
+                        User ID
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                                    
+                        </span>
+
+                        <input
+                            type="text"
+                            id="user_id"
+                            name="user_id"
+                            placeholder="Enter your User ID"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+                                        
+                        </span>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                >
+                    Login →
+                </button>
+
+            </form>
+
+            <div class="forgot">
+
+                <a href="{{ url_for('forgot_password') }}">
+                    Forgot Password?
+                </a>
+
+            </div>
+
+            <div class="security">
+                🔐 Secure access · Shubh Classes Portal
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

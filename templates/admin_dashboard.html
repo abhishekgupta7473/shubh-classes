@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shubh Classes - Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="admin-page">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">🎓</div>
+            <div>
+                <h2>Shubh Classes</h2>
+                <span>ADMIN PANEL</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('admin_dashboard') }}" class="active">
+                <span>▦</span>
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('students') }}">
+                <span>👨‍🎓</span>
+                Students
+            </a>
+
+            <a href="{{ url_for('teachers') }}">
+                <span>👨‍🏫</span>
+                Teachers
+            </a>
+
+            <a href="{{ url_for('admin_classes') }}">
+                <span>📚</span>
+                Classes
+            </a>
+
+            <a href="{{ url_for('add_fee') }}">
+                <span>💳</span>
+                Fees
+            </a>
+
+            <a href="{{ url_for('add_timetable') }}">
+                <span>🗓️</span>
+                Timetable
+            </a>
+
+            <a href="{{ url_for('add_result') }}">
+                <span>📊</span>
+                Results
+            </a>
+
+            <a href="{{ url_for('add_note') }}">
+                <span>📝</span>
+                Notes
+            </a>
+
+            <a href="{{ url_for('admin_reports') }}">
+                <span>📈</span>
+                Reports
+            </a>
+
+        </nav>
+
+        <div class="sidebar-welcome">
+            <p>Welcome back,</p>
+            <h3>Admin 👋</h3>
+
+            <a href="{{ url_for('logout') }}" class="btn-primary">
+                Logout
+            </a>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div class="admin-user">
+                <div class="admin-avatar">👤</div>
+                <div>
+                    <strong>Administrator</strong>
+                    <small>Management Panel</small>
+                </div>
+            </div>
+        </header>
+
+
+        <section class="page-content">
+
+    <!-- PAGE HEADER -->
+    <div class="page-heading">
+        <div>
+            <span class="welcome-label">ADMINISTRATION</span>
+            <h1>Dashboard</h1>
+            <div class="breadcrumb">
+                Home
+                <span>/</span>
+                <strong>Dashboard</strong>
+            </div>
+        </div>
+
+        <div class="dashboard-date">
+            <span>📅</span>
+            <div>
+                <strong>Admin Panel</strong>
+                <small>Manage your institute</small>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- STAT CARDS -->
+    <div class="dashboard-stats">
+
+        <div class="stat-card">
+            <div class="stat-icon">🎓</div>
+            <div class="stat-info">
+                <p>Total Students</p>
+                <h2>{{ total_students }}</h2>
+                <small>Registered students</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">👨‍🏫</div>
+            <div class="stat-info">
+                <p>Total Teachers</p>
+                <h2>{{ total_teachers }}</h2>
+                <small>Active teachers</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">📚</div>
+            <div class="stat-info">
+                <p>Total Classes</p>
+                <h2>{{ total_classes }}</h2>
+                <small>Available classes</small>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-info">
+                <p>Total Results</p>
+                <h2>{{ total_results }}</h2>
+                <small>Academic records</small>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- QUICK MANAGEMENT -->
+    <div class="premium-card">
+
+        <div class="form-card-header">
+            <div class="form-icon">⚡</div>
+
+            <div>
+                <h2>Quick Management</h2>
+                <p>Manage your institute from one place.</p>
+            </div>
+        </div>
+
+        <div class="orange-line"></div>
+
+        <div class="quick-actions">
+
+            <a href="{{ url_for('students') }}">
+                <span>🎓</span>
+                <strong>Students</strong>
+                <small>Manage students</small>
+            </a>
+
+            <a href="{{ url_for('teachers') }}">
+                <span>👨‍🏫</span>
+                <strong>Teachers</strong>
+                <small>Manage teachers</small>
+            </a>
+
+            <a href="{{ url_for('admin_classes') }}">
+                <span>📚</span>
+                <strong>Classes</strong>
+                <small>Manage classes</small>
+            </a>
+
+            <a href="{{ url_for('admin_fees') }}">
+                <span>💳</span>
+                <strong>Fees</strong>
+                <small>Manage fees</small>
+            </a>
+
+            <a href="{{ url_for('add_timetable') }}">
+                <span>🗓️</span>
+                <strong>Timetable</strong>
+                <small>Manage schedule</small>
+            </a>
+
+            <a href="{{ url_for('add_result') }}">
+                <span>📊</span>
+                <strong>Results</strong>
+                <small>Manage results</small>
+            </a>
+
+            <a href="{{ url_for('add_note') }}">
+                <span>📝</span>
+                <strong>Notes</strong>
+                <small>Manage notes</small>
+            </a>
+
+            <a href="{{ url_for('admin_reports') }}">
+                <span>📈</span>
+                <strong>Reports</strong>
+                <small>View reports</small>
+            </a>
+
+        </div>
+    </div>
+
+
+    <!-- WELCOME CARD -->
+    <div class="welcome-card">
+
+        <div class="welcome-content">
+
+            <span class="welcome-label">SHUBH CLASSES</span>
+
+            <h2>
+                Welcome to your Administration Panel 👋
+            </h2>
+
+            <p>
+                Manage students, teachers, classes, fees,
+                timetable and academic records easily.
+            </p>
+
+            <div class="welcome-points">
+                <span>✓ Student Management</span>
+                <span>✓ Teacher Management</span>
+                <span>✓ Academic Records</span>
+            </div>
+
+        </div>
+
+        <div class="welcome-icon">
+            🎓
+        </div>
+
+    </div>
+
+</section>
+    </main>
+
+</body>
+</html>

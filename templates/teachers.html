@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Teachers - Shubh Classes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="admin-page">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">🎓</div>
+
+            <div>
+                <h2>Shubh Classes</h2>
+                <span>ADMIN PANEL</span>
+            </div>
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('admin_dashboard') }}">
+                <span>▦</span>
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('students') }}">
+                <span>👨‍🎓</span>
+                Students
+            </a>
+
+            <a href="{{ url_for('teachers') }}" class="active">
+                <span>👨‍🏫</span>
+                Teachers
+            </a>
+
+            <a href="{{ url_for('admin_classes') }}">
+                <span>📚</span>
+                Classes
+            </a>
+
+            <a href="{{ url_for('add_fee') }}">
+                <span>💳</span>
+                Fees
+            </a>
+
+            <a href="{{ url_for('add_timetable') }}">
+                <span>🗓️</span>
+                Timetable
+            </a>
+
+            <a href="{{ url_for('add_result') }}">
+                <span>📊</span>
+                Results
+            </a>
+
+            <a href="{{ url_for('add_note') }}">
+                <span>📝</span>
+                Notes
+            </a>
+
+            <a href="{{ url_for('admin_reports') }}">
+                <span>📈</span>
+                Reports
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-welcome">
+
+            <p>Welcome back,</p>
+
+            <h3>Admin 👋</h3>
+
+            <a href="{{ url_for('logout') }}" class="btn-primary">
+                Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div class="admin-user">
+
+                <div class="admin-avatar">
+                    👤
+                </div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <small>Teacher Management</small>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="page-content">
+
+            <!-- PAGE HEADER -->
+            <div class="page-heading">
+
+                <h1>Teachers</h1>
+
+                <div class="breadcrumb">
+                    Home
+                    <span>/</span>
+                    <strong>Teachers</strong>
+                </div>
+
+            </div>
+
+
+            <!-- TEACHER CARD -->
+            <div class="premium-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-icon">
+                        👨‍🏫
+                    </div>
+
+                    <div>
+
+                        <h2>Teacher List</h2>
+
+                        <p>
+                            Manage all registered teachers.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="orange-line"></div>
+
+
+                <!-- TOOLBAR -->
+                <div class="student-toolbar">
+
+                    <div>
+
+                        <h3>All Teachers</h3>
+
+                        <p>
+                            View teacher information and manage records.
+                        </p>
+
+                    </div>
+
+                    <a href="{{ url_for('add_teacher') }}"
+                       class="btn-primary">
+                        + Add Teacher
+                    </a>
+
+                </div>
+
+
+                <!-- TABLE -->
+                <div class="table-wrapper">
+
+                    <table class="student-table teacher-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>User ID</th>
+
+                                <th>Name</th>
+
+                                <th>Phone</th>
+
+                                <th>Email</th>
+
+                                <th>Subject</th>
+
+                                <th>Qualification</th>
+
+                                <th>Joining Date</th>
+
+                                <th>Actions</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for teacher in teachers %}
+
+                            <tr>
+
+                                <td>
+                                    <span class="student-id">
+                                        {{ teacher.user_id }}
+                                    </span>
+                                </td>
+
+
+                                <td>
+
+                                    <div class="student-name">
+
+                                        <div class="student-avatar">
+                                            {{ teacher.name[0]|upper }}
+                                        </div>
+
+                                        <strong>
+                                            {{ teacher.name }}
+                                        </strong>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    {{ teacher.phone }}
+                                </td>
+
+
+                                <td>
+                                    {{ teacher.email }}
+                                </td>
+
+
+                                <td>
+
+                                    <span class="class-badge">
+                                        {{ teacher.subject }}
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+                                    {{ teacher.qualification }}
+                                </td>
+
+
+                                <td>
+                                    {{ teacher.joining_date }}
+                                </td>
+
+
+                                <!-- ACTIONS -->
+                                <td>
+
+                                    <div class="student-actions">
+
+                                        <a
+                                            href="{{ url_for('edit_teacher', user_id=teacher.user_id) }}"
+                                            class="action-btn edit-btn">
+                                            Edit
+                                        </a>
+
+
+                                        <form
+                                            method="POST"
+                                            action="{{ url_for('delete_teacher', user_id=teacher.user_id) }}"
+                                            onsubmit="return confirm('Are you sure you want to delete this teacher?');">
+
+                                            <button
+                                                type="submit"
+                                                class="action-btn delete-btn">
+                                                Delete
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

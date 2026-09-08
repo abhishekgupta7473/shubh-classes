@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Dashboard - Shubh Classes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172744;
+        }
+
+        /* ================================
+           MAIN
+        ================================= */
+
+        .student-premium-page {
+            min-height: 100vh;
+            padding: 28px 40px 45px;
+            background:
+                radial-gradient(circle at top right,
+                rgba(255,116,40,.06),
+                transparent 28%),
+                #f4f7fb;
+        }
+
+        .student-container {
+            max-width: 1280px;
+            margin: auto;
+        }
+
+
+        /* ================================
+           TOP BAR
+        ================================= */
+
+        .student-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            background: rgba(255,255,255,.95);
+
+            padding: 14px 18px;
+
+            border: 1px solid #e7ebf1;
+            border-radius: 18px;
+
+            margin-bottom: 24px;
+
+            box-shadow:
+                0 8px 30px rgba(23,39,68,.06);
+        }
+
+        .brand-area {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(135deg,
+                #172744,
+                #285aa0);
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 22px;
+
+            box-shadow:
+                0 7px 18px rgba(23,39,68,.18);
+        }
+
+        .brand-area h2 {
+            margin: 0;
+            color: #172744;
+            font-size: 20px;
+            letter-spacing: -.3px;
+        }
+
+        .brand-area span {
+            display: block;
+
+            color: #8993a5;
+
+            font-size: 10px;
+            font-weight: 800;
+
+            letter-spacing: 1.6px;
+
+            margin-top: 4px;
+        }
+
+        .logout-btn {
+            text-decoration: none;
+
+            background: #fff0f1;
+            color: #d64545;
+
+            padding: 11px 19px;
+
+            border-radius: 11px;
+
+            font-size: 13px;
+            font-weight: 800;
+
+            transition: .2s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ffe0e3;
+            transform: translateY(-1px);
+        }
+
+
+        /* ================================
+           WELCOME BANNER
+        ================================= */
+
+        .welcome-section {
+
+            min-height: 205px;
+
+            background:
+                linear-gradient(
+                    120deg,
+                    #142746 0%,
+                    #1d4380 62%,
+                    #285aa0 100%
+                );
+
+            color: white;
+
+            border-radius: 25px;
+
+            padding: 35px 38px;
+
+            margin-bottom: 25px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            overflow: hidden;
+            position: relative;
+
+            box-shadow:
+                0 16px 38px rgba(23,39,68,.16);
+        }
+
+        .welcome-section::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 310px;
+            height: 310px;
+
+            border-radius: 50%;
+
+            border: 1px solid rgba(255,255,255,.08);
+
+            right: 100px;
+            top: -150px;
+        }
+
+        .welcome-section::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 270px;
+            height: 270px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,116,40,.14);
+
+            right: -90px;
+            top: -80px;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-label {
+
+            color: #ff914f;
+
+            font-size: 11px;
+            font-weight: 900;
+
+            letter-spacing: 2px;
+        }
+
+        .welcome-section h1 {
+
+            margin: 9px 0 10px;
+
+            font-size: 36px;
+
+            letter-spacing: -.8px;
+        }
+
+        .welcome-section p {
+
+            margin: 0;
+
+            color: #d4ddea;
+
+            font-size: 14px;
+
+            max-width: 600px;
+        }
+
+
+        /* PROFILE PHOTO */
+
+        .welcome-avatar {
+
+            width: 96px;
+            height: 96px;
+
+            border-radius: 50%;
+
+            background: #ff7428;
+
+            border: 4px solid rgba(255,255,255,.9);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 38px;
+
+            position: relative;
+            z-index: 3;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 12px 30px rgba(0,0,0,.22);
+        }
+
+        .welcome-avatar img {
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+        }
+
+
+        /* ================================
+           STUDENT INFORMATION
+        ================================= */
+
+        .student-info {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+
+            position: relative;
+
+            background: white;
+
+            border: 1px solid #e7ebf1;
+
+            border-radius: 18px;
+
+            padding: 23px;
+
+            box-shadow:
+                0 8px 25px rgba(23,39,68,.055);
+
+            transition: .2s ease;
+
+            overflow: hidden;
+        }
+
+        .info-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 70px;
+            height: 70px;
+
+            border-radius: 50%;
+
+            background: rgba(255,116,40,.07);
+
+            right: -20px;
+            bottom: -25px;
+        }
+
+        .info-card:hover {
+
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 13px 30px rgba(23,39,68,.10);
+        }
+
+        .info-card strong {
+
+            display: block;
+
+            color: #8993a5;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 9px;
+        }
+
+        .info-card p {
+
+            margin: 0;
+
+            color: #172744;
+
+            font-size: 19px;
+
+            font-weight: 850;
+        }
+
+
+        /* ================================
+           SECTION HEADERS
+        ================================= */
+
+        .learning-header {
+
+            margin-bottom: 18px;
+        }
+
+        .learning-header small {
+
+            color: #ff7428;
+
+            font-size: 11px;
+
+            font-weight: 900;
+
+            letter-spacing: 1.7px;
+        }
+
+        .learning-header h2 {
+
+            margin: 5px 0 4px;
+
+            color: #172744;
+
+            font-size: 25px;
+
+            letter-spacing: -.4px;
+        }
+
+        .section-description {
+
+            margin: 0;
+
+            color: #8993a5;
+
+            font-size: 13px;
+        }
+
+
+        /* ================================
+           SCHEDULE
+        ================================= */
+
+        .my-classes-section {
+
+            margin-bottom: 35px;
+        }
+
+        .class-schedule-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 16px;
+        }
+
+        .class-schedule-card {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 17px;
+
+            background: white;
+
+            border: 1px solid #e7ebf1;
+
+            border-radius: 18px;
+
+            padding: 18px;
+
+            box-shadow:
+                0 8px 24px rgba(23,39,68,.05);
+
+            transition: .2s ease;
+        }
+
+        .class-schedule-card:hover {
+
+            transform: translateY(-3px);
+
+            border-color: #ffd0b6;
+
+            box-shadow:
+                0 13px 30px rgba(23,39,68,.09);
+        }
+
+        .class-date-box {
+
+            min-width: 65px;
+            height: 65px;
+
+            border-radius: 16px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #fff1e8,
+                    #ffe6d6
+                );
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #ff7428;
+        }
+
+        .class-date-box span {
+
+            font-size: 20px;
+        }
+
+        .class-date-box strong {
+
+            font-size: 10px;
+
+            margin-top: 3px;
+
+            text-transform: uppercase;
+        }
+
+        .class-schedule-content {
+
+            flex: 1;
+        }
+
+        .class-subject {
+
+            color: #172744;
+
+            font-size: 17px;
+
+            font-weight: 850;
+
+            margin-bottom: 9px;
+        }
+
+        .class-details {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 9px;
+        }
+
+        .class-details span {
+
+            background: #f5f7fa;
+
+            color: #68758a;
+
+            padding: 6px 9px;
+
+            border-radius: 8px;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+
+        /* NO CLASSES */
+
+        .no-classes-card {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 16px;
+
+            background: white;
+
+            border: 1px dashed #d8dee8;
+
+            border-radius: 18px;
+
+            padding: 25px;
+        }
+
+        .no-classes-icon {
+
+            width: 52px;
+            height: 52px;
+
+            border-radius: 14px;
+
+            background: #fff1e8;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 23px;
+        }
+
+        .no-classes-card strong {
+
+            color: #172744;
+
+            font-size: 15px;
+        }
+
+        .no-classes-card p {
+
+            margin: 5px 0 0;
+
+            color: #8993a5;
+
+            font-size: 12px;
+        }
+
+
+        /* ================================
+           SERVICES
+        ================================= */
+
+        .dashboard-buttons {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 17px;
+        }
+
+        .learning-card {
+
+            position: relative;
+
+            background: white;
+
+            border: 1px solid #e7ebf1;
+
+            border-radius: 19px;
+
+            padding: 23px;
+
+            text-decoration: none;
+
+            box-shadow:
+                0 8px 25px rgba(23,39,68,.055);
+
+            transition: .22s ease;
+
+            overflow: hidden;
+        }
+
+        .learning-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 90px;
+            height: 90px;
+
+            border-radius: 50%;
+
+            background: rgba(255,116,40,.06);
+
+            right: -35px;
+            bottom: -35px;
+        }
+
+        .learning-card:hover {
+
+            transform: translateY(-5px);
+
+            border-color: #ffc6a7;
+
+            box-shadow:
+                0 15px 35px rgba(23,39,68,.10);
+        }
+
+        .learning-icon {
+
+            width: 50px;
+            height: 50px;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #fff1e8,
+                    #ffe4d3
+                );
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 22px;
+
+            margin-bottom: 17px;
+        }
+
+        .learning-card strong {
+
+            display: block;
+
+            color: #172744;
+
+            font-size: 15px;
+        }
+
+        .learning-card span {
+
+            display: block;
+
+            color: #8993a5;
+
+            font-size: 11px;
+
+            margin-top: 6px;
+        }
+
+
+        /* ================================
+           FOOTER
+        ================================= */
+
+        .student-footer {
+
+            margin-top: 35px;
+
+            padding: 20px 23px;
+
+            border-radius: 17px;
+
+            background: white;
+
+            border: 1px solid #e7ebf1;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            box-shadow:
+                0 6px 20px rgba(23,39,68,.035);
+        }
+
+        .student-footer p {
+
+            margin: 0;
+
+            color: #8993a5;
+
+            font-size: 12px;
+        }
+
+        .footer-brand {
+
+            color: #172744;
+
+            font-weight: 850;
+        }
+
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 1050px) {
+
+            .dashboard-buttons {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .class-schedule-grid {
+
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        @media (max-width: 900px) {
+
+            .student-premium-page {
+
+                padding: 22px 16px 35px;
+            }
+
+            .student-info {
+
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-section {
+
+                padding: 28px;
+            }
+        }
+
+
+        @media (max-width: 600px) {
+
+            .student-topbar {
+
+                padding: 12px;
+            }
+
+            .brand-area h2 {
+
+                font-size: 17px;
+            }
+
+            .logout-btn {
+
+                padding: 9px 12px;
+                font-size: 11px;
+            }
+
+            .welcome-section {
+
+                padding: 25px;
+
+                min-height: 180px;
+            }
+
+            .welcome-section h1 {
+
+                font-size: 27px;
+            }
+
+            .welcome-section p {
+
+                font-size: 12px;
+
+                max-width: 75%;
+            }
+
+            .welcome-avatar {
+
+                width: 70px;
+                height: 70px;
+
+                font-size: 27px;
+            }
+
+            .dashboard-buttons {
+
+                grid-template-columns: 1fr;
+            }
+
+            .class-schedule-card {
+
+                align-items: flex-start;
+            }
+
+            .class-details {
+
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .student-footer {
+
+                flex-direction: column;
+
+                gap: 12px;
+
+                align-items: flex-start;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="student-premium-page">
+
+    <div class="student-container">
+
+
+        <!-- =========================================
+             TOP BAR
+        ========================================== -->
+
+        <div class="student-topbar">
+
+            <div class="brand-area">
+
+                <div class="brand-icon">
+                    🎓
+                </div>
+
+                <div>
+
+                    <h2>
+                        Shubh Classes
+                    </h2>
+
+                    <span>
+                        STUDENT PORTAL
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <a href="{{ url_for('logout') }}"
+               class="logout-btn">
+
+                Logout
+
+            </a>
+
+        </div>
+
+
+
+        <!-- =========================================
+             WELCOME SECTION
+        ========================================== -->
+
+        <div class="welcome-section">
+
+            <div class="welcome-content">
+
+                <span class="welcome-label">
+                    STUDENT DASHBOARD
+                </span>
+
+                <h1>
+                    Welcome, {{ student.name }} 👋
+                </h1>
+
+                <p>
+                    Manage your classes, attendance, results,
+                    fees and learning resources from one place.
+                </p>
+
+            </div>
+
+
+            <div class="welcome-avatar">
+
+                {% if student.profile_pic %}
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename='uploads/profile_pics/' + student.profile_pic
+                        ) }}"
+                        alt="Profile Picture">
+
+                {% else %}
+
+                    🎓
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================================
+             STUDENT INFORMATION
+        ========================================== -->
+
+        <div class="student-info">
+
+
+            <div class="info-card">
+
+                <strong>
+                    User ID
+                </strong>
+
+                <p>
+                    {{ student.user_id }}
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <strong>
+                    Class
+                </strong>
+
+                <p>
+                    {{ student.class_name }}
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <strong>
+                    Course
+                </strong>
+
+                <p>
+                    {{ student.course }}
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================================
+             MY CLASSES
+        ========================================== -->
+
+        <div class="my-classes-section">
+
+
+            <div class="learning-header">
+
+                <small>
+                    MY CLASSES
+                </small>
+
+                <h2>
+                    Scheduled Classes
+                </h2>
+
+                <p class="section-description">
+                    Your upcoming classes and teaching schedule.
+                </p>
+
+            </div>
+
+
+            {% if schedule %}
+
+
+                <div class="class-schedule-grid">
+
+
+                    {% for item in schedule %}
+
+
+                        <div class="class-schedule-card">
+
+
+                            <div class="class-date-box">
+
+                                <span>
+                                    📅
+                                </span>
+
+                                <strong>
+                                    {{ item.day_name }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="class-schedule-content">
+
+
+                                <div class="class-subject">
+
+                                    {{ item.subject }}
+
+                                </div>
+
+
+                                <div class="class-details">
+
+
+                                    <span>
+
+                                        🕐
+                                        {{ item.start_time }}
+                                        -
+                                        {{ item.end_time }}
+
+                                    </span>
+
+
+                                    <span>
+
+                                        🏫
+                                        Room {{ item.room }}
+
+                                    </span>
+
+
+                                    <span>
+
+                                        📚
+                                        Class {{ item.class_name }}
+
+                                    </span>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <div class="no-classes-card">
+
+                    <div class="no-classes-icon">
+                        🗓️
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            No Scheduled Classes
+                        </strong>
+
+                        <p>
+                            Your class timetable has not been added yet.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+
+        <!-- =========================================
+             STUDENT SERVICES
+        ========================================== -->
+
+        <div class="learning-header">
+
+            <small>
+                MY LEARNING
+            </small>
+
+            <h2>
+                Student Services
+            </h2>
+
+            <p class="section-description">
+                Access everything you need for your studies.
+            </p>
+
+        </div>
+
+
+
+        <div class="dashboard-buttons">
+
+
+            <!-- My Classes -->
+
+            <a href="{{ url_for('student_classes') }}"
+               class="learning-card">
+
+                <div class="learning-icon">
+                    📚
+                </div>
+
+                <strong>
+                    My Classes
+                </strong>
+
+                <span>
+                    View your classes
+                </span>
+
+            </a>
+
+
+
+            <!-- Fees -->
+
+            <a href="{{ url_for(
+                        'student_fees',
+                        user_id=student.user_id
+                     ) }}"
+               class="learning-card">
+
+                <div class="learning-icon">
+                    💳
+                </div>
+
+                <strong>
+                    My Fees
+                </strong>
+
+                <span>
+                    View fee records
+                </span>
+
+            </a>
+
+
+
+            <!-- Notes -->
+
+            <a href="{{ url_for('student_notes') }}"
+               class="learning-card">
+
+                <div class="learning-icon">
+                    📝
+                </div>
+
+                <strong>
+                    Notes
+                </strong>
+
+                <span>
+                    Study materials
+                </span>
+
+            </a>
+
+
+
+            <!-- Attendance -->
+
+            <a href="{{ url_for(
+                        'student_attendance',
+                        user_id=student.user_id
+                     ) }}"
+               class="learning-card">
+
+                <div class="learning-icon">
+                    📋
+                </div>
+
+                <strong>
+                    My Attendance
+                </strong>
+
+                <span>
+                    Check attendance
+                </span>
+
+            </a>
+
+
+
+            <!-- Results -->
+
+            <a href="{{ url_for(
+                        'student_results',
+                        user_id=student.user_id
+                     ) }}"
+               class="learning-card">
+
+                <div class="learning-icon">
+                    📊
+                </div>
+
+                <strong>
+                    My Results
+                </strong>
+
+                <span>
+                    View examination results
+                </span>
+
+            </a>
+
+
+
+            <!-- Timetable -->
+
+            <a href="{{ url_for(
+                        'student_timetable',
+                        class_name=student.class_name
+                     ) }}"
+               class="learning-card">
+
+                <div class="learning-icon">
+                    🗓️
+                </div>
+
+                <strong>
+                    Timetable
+                </strong>
+
+                <span>
+                    View class schedule
+                </span>
+
+            </a>
+
+
+
+            <!-- Profile -->
+
+            <a href="{{ url_for('student_profile') }}"
+               class="learning-card">
+
+                <div class="learning-icon">
+                    👤
+                </div>
+
+                <strong>
+                    My Profile
+                </strong>
+
+                <span>
+                    Your account details
+                </span>
+
+            </a>
+
+
+        </div>
+
+
+
+        <!-- =========================================
+             FOOTER
+        ========================================== -->
+
+        <div class="student-footer">
+
+            <p>
+
+                <span class="footer-brand">
+                    Shubh Classes
+                </span>
+
+                — Your learning journey starts here.
+
+            </p>
+
+            <p>
+                Student Portal
+            </p>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

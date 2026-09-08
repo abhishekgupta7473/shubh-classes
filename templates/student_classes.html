@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Classes - Shubh Classes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .classes-page {
+            min-height: 100vh;
+            background: #f5f7fb;
+            padding: 42px;
+            box-sizing: border-box;
+        }
+
+        .classes-container {
+            max-width: 1150px;
+            margin: 0 auto;
+        }
+
+        .classes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .classes-label {
+            color: #ff7426;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .classes-header h1 {
+            margin: 7px 0 0;
+            color: #172554;
+            font-size: 38px;
+            font-weight: 800;
+        }
+
+        .classes-header p {
+            margin: 8px 0 0;
+            color: #7c879a;
+            font-size: 14px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #172554;
+            color: white;
+            padding: 12px 19px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            transition: .2s;
+        }
+
+        .back-btn:hover {
+            background: #ff7426;
+            transform: translateY(-2px);
+        }
+
+        .classes-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .class-card {
+            background: white;
+            border: 1px solid #e7ebf1;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(23, 37, 84, .06);
+            transition: .2s ease;
+        }
+
+        .class-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 35px rgba(23, 37, 84, .10);
+        }
+
+        .class-top {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .class-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 15px;
+            background: #fff1e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .class-top h2 {
+            margin: 0;
+            color: #172554;
+            font-size: 20px;
+        }
+
+        .class-day {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 5px 9px;
+            border-radius: 7px;
+            background: #eef3ff;
+            color: #3157a6;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .class-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .detail-box {
+            background: #f8fafc;
+            border: 1px solid #e8edf3;
+            border-radius: 11px;
+            padding: 13px;
+        }
+
+        .detail-box span {
+            display: block;
+            color: #8993a5;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: 5px;
+        }
+
+        .detail-box strong {
+            color: #172554;
+            font-size: 13px;
+        }
+
+        .empty-state {
+            background: white;
+            border: 1px solid #e7ebf1;
+            border-radius: 20px;
+            padding: 65px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(23, 37, 84, .06);
+        }
+
+        .empty-icon {
+            font-size: 50px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h2 {
+            margin: 0;
+            color: #172554;
+        }
+
+        .empty-state p {
+            margin-top: 8px;
+            color: #8993a5;
+            font-size: 14px;
+        }
+
+        .footer-action {
+            margin-top: 25px;
+        }
+
+        @media (max-width: 800px) {
+
+            .classes-page {
+                padding: 28px 16px;
+            }
+
+            .classes-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .classes-header h1 {
+                font-size: 30px;
+            }
+
+            .classes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .class-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="classes-page">
+
+    <div class="classes-container">
+
+        <!-- HEADER -->
+
+        <div class="classes-header">
+
+            <div>
+                <div class="classes-label">
+                    STUDENT PORTAL
+                </div>
+
+                <h1>
+                    My Classes
+                </h1>
+
+                <p>
+                    View your scheduled classes, subjects and teachers.
+                </p>
+            </div>
+
+            <a href="{{ url_for('student_dashboard', user_id=session.get('user_id')) }}"
+               class="back-btn">
+                ← Dashboard
+            </a>
+
+        </div>
+
+
+        {% if classes %}
+
+        <!-- CLASSES -->
+
+        <div class="classes-grid">
+
+            {% for item in classes %}
+
+            <div class="class-card">
+
+                <div class="class-top">
+
+                    <div class="class-icon">
+                        📚
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            {{ item.subject }}
+                        </h2>
+
+                        <span class="class-day">
+                            {{ item.day_name }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="class-details">
+
+                    <div class="detail-box">
+
+                        <span>
+                            Time
+                        </span>
+
+                        <strong>
+                            {{ item.start_time }} -
+                            {{ item.end_time }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span>
+                            Room
+                        </span>
+
+                        <strong>
+                            🏫 {{ item.room }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span>
+                            Teacher
+                        </span>
+
+                        <strong>
+                            {{ item.teacher_user_id }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span>
+                            Class
+                        </span>
+
+                        <strong>
+                            {{ item.class_name }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <!-- EMPTY -->
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                📚
+            </div>
+
+            <h2>
+                No Classes Available
+            </h2>
+
+            <p>
+                Your scheduled classes will appear here once they are added.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="footer-action">
+
+            <a href="{{ url_for('student_dashboard', user_id=session.get('user_id')) }}"
+               class="back-btn">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

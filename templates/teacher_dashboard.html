@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - Shubh Classes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="teacher-page">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">🎓</div>
+            <div>
+                <h2>Shubh Classes</h2>
+                <span>TEACHER PANEL</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="{{ url_for('teacher_dashboard') }}" class="active">
+                <span>▦</span>
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('teacher_classes') }}">
+                <span>📚</span>
+                My Classes
+            </a>
+
+            <a href="{{ url_for('teacher_students') }}">
+                <span>🎓</span>
+                Students
+            </a>
+
+            <a href="{{ url_for('teacher_attendance') }}">
+                <span>📋</span>
+                Attendance
+            </a>
+
+            <a href="{{ url_for('add_result') }}">
+                <span>📊</span>
+                Results
+            </a>
+
+            <a href="{{ url_for('add_note') }}">
+                <span>📝</span>
+                Notes
+            </a>
+
+            <a href="{{ url_for('teacher_schedule', teacher_user_id=session['user_id']) }}">
+                <span>🗓️</span>
+                Schedule
+            </a>
+
+            <a href="{{ url_for('teacher_profile') }}">
+                <span>👤</span>
+                My Profile
+            </a>
+
+        </nav>
+
+        <div class="sidebar-welcome">
+            <p>Welcome back,</p>
+            <h3>Teacher 👋</h3>
+
+            <a href="{{ url_for('logout') }}" class="btn-primary">
+                Logout
+            </a>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div></div>
+
+            <div class="admin-user">
+                <div class="admin-avatar">👨‍🏫</div>
+
+                <div>
+                    <strong>Teacher</strong>
+                    <small>Teacher Panel</small>
+                </div>
+            </div>
+
+        </header>
+
+
+        <!-- PAGE CONTENT -->
+        <section class="page-content">
+
+            <div class="page-heading">
+
+                <div>
+                    <span class="welcome-label">TEACHER PANEL</span>
+
+                    <h1>Teacher Dashboard</h1>
+
+                    <div class="breadcrumb">
+                        Home
+                        <span>/</span>
+                        <strong>Dashboard</strong>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- WELCOME CARD -->
+            <div class="premium-card teacher-welcome-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-icon">👨‍🏫</div>
+
+                    <div>
+                        <h2>Welcome, Teacher 👋</h2>
+
+                        <p>
+                            Manage your classes, students and academic activities
+                            from one place.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="orange-line"></div>
+
+            </div>
+
+
+            <!-- QUICK ACTIONS -->
+            <div class="premium-card">
+
+                <div class="form-card-header">
+
+                    <div class="form-icon">⚡</div>
+
+                    <div>
+                        <h2>Quick Management</h2>
+
+                        <p>
+                            Access your teaching tools quickly.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="orange-line"></div>
+
+
+                <div class="quick-actions">
+
+                    <a href="{{ url_for('teacher_classes') }}">
+                        <span>📚</span>
+                        <strong>My Classes</strong>
+                        <small>View your classes</small>
+                    </a>
+
+                    <a href="{{ url_for('teacher_students') }}">
+                        <span>🎓</span>
+                        <strong>Students</strong>
+                        <small>Manage students</small>
+                    </a>
+
+                    <a href="{{ url_for('teacher_attendance') }}">
+                        <span>📋</span>
+                        <strong>Attendance</strong>
+                        <small>Manage attendance</small>
+                    </a>
+
+                    <a href="{{ url_for('add_result') }}">
+                        <span>📊</span>
+                        <strong>Results</strong>
+                        <small>Add student results</small>
+                    </a>
+
+                    <a href="{{ url_for('add_note') }}">
+                        <span>📝</span>
+                        <strong>Notes</strong>
+                        <small>Create notes</small>
+                    </a>
+
+                    <a href="{{ url_for('teacher_schedule', teacher_user_id=session['user_id']) }}">
+                        <span>🗓️</span>
+                        <strong>Schedule</strong>
+                        <small>View timetable</small>
+                    </a>
+
+                    <a href="{{ url_for('teacher_profile') }}">
+                        <span>👤</span>
+                        <strong>My Profile</strong>
+                        <small>Manage profile</small>
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- INFORMATION CARD -->
+            <div class="welcome-card">
+
+                <div>
+                    <span class="welcome-label">SHUBH CLASSES</span>
+
+                    <h2>Your Teaching Dashboard 👋</h2>
+
+                    <p>
+                        Manage classes, students, attendance, results and
+                        academic records easily from your teacher panel.
+                    </p>
+                </div>
+
+                <div class="welcome-icon">
+                    👨‍🏫
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

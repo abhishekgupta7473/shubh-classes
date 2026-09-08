@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Payment History - Shubh Classes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .history-page {
+            min-height: 100vh;
+            background: #f5f7fb;
+            padding: 42px 20px;
+            box-sizing: border-box;
+        }
+
+        .history-container {
+            max-width: 1050px;
+            margin: 0 auto;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .history-label {
+            color: #ff7426;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .history-header h1 {
+            margin: 7px 0 0;
+            color: #172744;
+            font-size: 36px;
+            font-weight: 800;
+        }
+
+        .history-header p {
+            margin: 8px 0 0;
+            color: #7c879a;
+            font-size: 14px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            background: #172744;
+            color: white;
+            padding: 12px 19px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .back-btn:hover {
+            background: #ff7426;
+        }
+
+        .transaction-card {
+            background: white;
+            border: 1px solid #e7ebf1;
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 16px;
+            box-shadow: 0 10px 30px rgba(23, 39, 68, .06);
+        }
+
+        .transaction-main {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .payment-icon {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 15px;
+            background: #e8f8ef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .transaction-info {
+            flex: 1;
+        }
+
+        .transaction-info h2 {
+            margin: 0;
+            color: #172744;
+            font-size: 18px;
+        }
+
+        .transaction-info p {
+            margin: 6px 0 0;
+            color: #8993a5;
+            font-size: 12px;
+        }
+
+        .transaction-amount {
+            text-align: right;
+        }
+
+        .transaction-amount strong {
+            display: block;
+            color: #172744;
+            font-size: 20px;
+        }
+
+        .paid-badge {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 5px 9px;
+            border-radius: 7px;
+            background: #e8f8ef;
+            color: #198754;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .transaction-details {
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid #edf0f4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .payment-id {
+            color: #8993a5;
+            font-size: 11px;
+            word-break: break-all;
+        }
+
+        .payment-id strong {
+            color: #34425c;
+        }
+
+        .receipt-btn {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            background: #172744;
+            color: white;
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .receipt-btn:hover {
+            background: #ff7426;
+        }
+
+        .empty-history {
+            background: white;
+            border: 1px solid #e7ebf1;
+            border-radius: 20px;
+            padding: 65px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(23, 39, 68, .06);
+        }
+
+        .empty-icon {
+            font-size: 50px;
+            margin-bottom: 12px;
+        }
+
+        .empty-history h2 {
+            margin: 0;
+            color: #172744;
+        }
+
+        .empty-history p {
+            color: #8993a5;
+            font-size: 14px;
+        }
+
+        @media (max-width: 650px) {
+
+            .history-page {
+                padding: 28px 15px;
+            }
+
+            .history-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .history-header h1 {
+                font-size: 30px;
+            }
+
+            .transaction-main {
+                align-items: flex-start;
+            }
+
+            .transaction-amount {
+                text-align: left;
+                margin-left: auto;
+            }
+
+            .transaction-details {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .receipt-btn {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="history-page">
+
+    <div class="history-container">
+
+        <div class="history-header">
+
+            <div>
+                <div class="history-label">
+                    STUDENT PORTAL
+                </div>
+
+                <h1>
+                    Payment History
+                </h1>
+
+                <p>
+                    View your previous fee payments and download receipts.
+                </p>
+            </div>
+
+            <a href="{{ url_for('student_dashboard', user_id=user_id) }}"
+               class="back-btn">
+                ← Dashboard
+            </a>
+
+        </div>
+
+
+        {% if transactions %}
+
+            {% for transaction in transactions %}
+
+                <div class="transaction-card">
+
+                    <div class="transaction-main">
+
+                        <div class="payment-icon">
+                            ✓
+                        </div>
+
+                        <div class="transaction-info">
+
+                            <h2>
+                                Fee Payment
+                            </h2>
+
+                            <p>
+                                {{ transaction.payment_date }}
+                            </p>
+
+                        </div>
+
+                        <div class="transaction-amount">
+
+                            <strong>
+                                ₹{{ "%.2f"|format(transaction.amount) }}
+                            </strong>
+
+                            <span class="paid-badge">
+                                {{ transaction.status }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="transaction-details">
+
+                        <div class="payment-id">
+
+                            Payment ID:
+                            <strong>
+                                {{ transaction.razorpay_payment_id }}
+                            </strong>
+
+                        </div>
+
+                        <a
+                            href="{{ url_for('payment_receipt', payment_id=transaction.razorpay_payment_id) }}"
+                            class="receipt-btn">
+                            🧾 Download Receipt
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-history">
+
+                <div class="empty-icon">
+                    💳
+                </div>
+
+                <h2>
+                    No Payments Yet
+                </h2>
+
+                <p>
+                    Your online payment transactions will appear here.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Note - Shubh Classes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+          
+
+    <style>
+        .pdf-upload-box {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px;
+    border: 1.5px dashed #d7dce6;
+    border-radius: 14px;
+    background: #fafbfc;
+    transition: 0.2s ease;
+}
+
+.pdf-upload-box:hover {
+    border-color: #ff7a2f;
+    background: #fffaf7;
+}
+
+.pdf-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: #fff1e8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    flex-shrink: 0;
+}
+
+.pdf-upload-content {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.pdf-upload-content strong {
+    color: #17243f;
+    font-size: 14px;
+}
+
+.pdf-upload-content span {
+    color: #8993a4;
+    font-size: 12px;
+}
+
+.pdf-upload-content input {
+    margin-top: 7px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    font-size: 12px;
+}
+
+.upload-hint {
+    display: block;
+    margin-top: 7px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+        .note-page {
+            min-height: 100vh;
+            background: #f5f7fb;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .note-container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .note-header {
+            margin-bottom: 28px;
+        }
+
+        .note-header small {
+            display: block;
+            color: #ff7a2f;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .note-header h1 {
+            margin: 0;
+            color: #17243f;
+            font-size: 36px;
+            font-weight: 800;
+        }
+
+        .note-header p {
+            margin: 8px 0 0;
+            color: #718096;
+        }
+
+        .note-card {
+            background: white;
+            border-radius: 22px;
+            padding: 34px;
+            box-shadow: 0 12px 35px rgba(23, 36, 63, 0.08);
+            border: 1px solid #edf0f5;
+        }
+
+        .form-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .form-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 15px;
+            background: #fff1e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .form-title h2 {
+            margin: 0;
+            color: #17243f;
+            font-size: 21px;
+        }
+
+        .form-title span {
+            color: #8993a4;
+            font-size: 13px;
+        }
+
+        .note-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            color: #344054;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px 14px;
+            border: 1px solid #d9dee8;
+            border-radius: 10px;
+            background: #fbfcfe;
+            color: #17243f;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s ease;
+            resize: vertical;
+        }
+
+        .form-group input {
+            min-height: 47px;
+        }
+
+        .description-box {
+            min-height: 100px;
+        }
+
+        .content-box {
+            min-height: 210px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #ff7a2f;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 122, 47, 0.10);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #a4acb9;
+        }
+
+        .form-divider {
+            grid-column: 1 / -1;
+            height: 1px;
+            background: #edf0f5;
+            margin: 4px 0;
+        }
+
+        .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .save-btn {
+            border: none;
+            background: #ff7a2f;
+            color: white;
+            padding: 13px 24px;
+            border-radius: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(255, 122, 47, 0.20);
+            transition: 0.2s ease;
+        }
+
+        .save-btn:hover {
+            background: #f46d24;
+            transform: translateY(-1px);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 13px 20px;
+            border-radius: 10px;
+            background: #eef1f6;
+            color: #344054;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .back-btn:hover {
+            background: #e3e7ee;
+        }
+
+        @media (max-width: 650px) {
+            .note-page {
+                padding: 25px 15px;
+            }
+
+            .note-card {
+                padding: 22px;
+            }
+
+            .note-form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full,
+            .form-divider,
+            .form-actions {
+                grid-column: auto;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+            }
+
+            .save-btn,
+            .back-btn {
+                width: 100%;
+                justify-content: center;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="note-page">
+
+    <div class="note-container">
+
+        <div class="note-header">
+            <small>Academic Management</small>
+            <h1>Add New Note</h1>
+            <p>Create and save an academic note for students.</p>
+        </div>
+
+        <div class="note-card">
+
+            <div class="form-title">
+                <div class="form-icon">📝</div>
+
+                <div>
+                    <h2>Note Information</h2>
+                    <span>Enter the details of your note below.</span>
+                </div>
+            </div>
+
+            <form method="POST"
+      action="/teacher/add-note"
+      class="note-form"
+      enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <label>Title</label>
+
+                    <input
+                        type="text"
+                        name="title"
+                        placeholder="e.g. Algebra Basics"
+                        required>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Subject</label>
+
+                    <input
+                        type="text"
+                        name="subject"
+                        placeholder="e.g. Mathematics"
+                        required>
+                </div>
+
+
+                <div class="form-group full">
+                    <label>Description</label>
+
+                    <textarea
+                        name="description"
+                        class="description-box"
+                        placeholder="Write a short description..."
+                        required></textarea>
+                </div>
+
+
+                <div class="form-group full">
+                    <label>Note Content</label>
+
+                    <textarea
+                        name="content"
+                        class="content-box"
+                        placeholder="Write your notes here..."
+                        required></textarea>
+                </div>
+
+
+                <div class="form-group full">
+                    <label>Teacher User ID</label>
+
+                    <input
+                        type="text"
+                        name="teacher_user_id"
+                        placeholder="e.g. TCH001"
+                        required>
+                </div>
+
+                <div class="form-group full">
+
+    <label>Attach PDF Notes</label>
+
+    <div class="pdf-upload-box">
+
+        <div class="pdf-icon">
+            📄
+        </div>
+
+        <div class="pdf-upload-content">
+
+            <strong>Upload PDF</strong>
+
+            <span>
+                Students will be able to download this PDF.
+            </span>
+
+            <input
+                type="file"
+                name="pdf_file"
+                accept=".pdf,application/pdf">
+
+        </div>
+
+    </div>
+
+    <small class="upload-hint">
+        PDF files only.
+    </small>
+
+</div>
+
+
+                <div class="form-divider"></div>
+
+
+                <div class="form-actions">
+
+                    {% if session.get("role") == "admin" %}
+    <a href="{{ url_for('admin_dashboard') }}" class="back-btn">
+        ← Back To Dashboard
+    </a>
+{% elif session.get("role") == "teacher" %}
+    <a href="{{ url_for('teacher_dashboard') }}" class="back-btn">
+        ← Back To Dashboard
+    </a>
+{% endif %}
+                     
+
+                    <button
+                        type="submit"
+                        class="save-btn">
+                        ✓ Save Note
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

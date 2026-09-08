@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Attendance - Shubh Classes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="teacher-page">
+
+<div class="attendance-page">
+
+    <div class="attendance-header">
+        <div>
+            <span class="page-label">TEACHER PANEL</span>
+            <h1>Mark Attendance</h1>
+            <p>Manage student attendance class-wise.</p>
+        </div>
+
+        <a href="{{ url_for('teacher_dashboard') }}"
+           class="back-btn">
+            ← Dashboard
+        </a>
+    </div>
+
+
+    <!-- SELECT CLASS -->
+    <div class="attendance-card">
+
+        <div class="card-title">
+            <div class="card-icon">📋</div>
+            <div>
+                <h2>Select Class</h2>
+                <p>Choose a class to view its students.</p>
+            </div>
+        </div>
+
+        <form method="GET"
+              action="{{ url_for('teacher_attendance') }}"
+              class="attendance-filter">
+
+            <div class="form-group">
+                <label>Class</label>
+
+                <select name="class_name" required>
+                    <option value="">Select Class</option>
+
+                    {% for cls in classes %}
+                        <option value="{{ cls.class_name }}"
+                            {% if selected_class == cls.class_name %}
+                                selected
+                            {% endif %}>
+                            {{ cls.class_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Attendance Date</label>
+
+                <input type="date"
+                       name="attendance_date"
+                       value="{{ attendance_date }}"
+                       required>
+            </div>
+
+            <button type="submit" class="primary-btn">
+                View Students
+            </button>
+
+        </form>
+    </div>
+
+
+    {% if students %}
+
+    <!-- STUDENT ATTENDANCE -->
+    <div class="attendance-card">
+
+        <div class="student-list-header">
+            <div>
+                <span class="page-label">CLASS</span>
+                <h2>{{ selected_class }}</h2>
+                <p>{{ students|length }} students found</p>
+            </div>
+        </div>
+
+
+        <form method="POST"
+              action="{{ url_for('teacher_attendance') }}">
+
+            <input type="hidden"
+                   name="class_name"
+                   value="{{ selected_class }}">
+
+            <input type="hidden"
+       name="attendance_date"
+       id="attendanceDate"
+       value="{{ attendance_date }}">
+       <input type="hidden"
+       name="selected_date"
+       value="{{ attendance_date }}">
+
+
+            <div class="student-table">
+
+                <div class="student-row student-heading">
+                    <div>#</div>
+                    <div>Student</div>
+                    <div>User ID</div>
+                    <div>Attendance</div>
+                </div>
+
+
+                {% for student in students %}
+
+                <div class="student-row">
+
+                    <div class="student-number">
+                        {{ loop.index }}
+                    </div>
+
+                    <div class="student-info">
+                        <strong>{{ student.name }}</strong>
+                        <span>{{ student.class_name }}</span>
+                    </div>
+
+                    <div class="student-id">
+                        {{ student.user_id }}
+                    </div>
+
+                    <div class="attendance-options">
+
+                        <label class="attendance-option present-option">
+                            <input type="radio"
+                                   name="status_{{ student.user_id }}"
+                                   value="Present"
+                                   checked>
+                            <span>✓ Present</span>
+                        </label>
+
+                        <label class="attendance-option absent-option">
+                            <input type="radio"
+                                   name="status_{{ student.user_id }}"
+                                   value="Absent">
+                            <span>✕ Absent</span>
+                        </label>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <div class="submit-area">
+
+                <div>
+                    <strong>Ready to submit?</strong>
+                    <p>
+                        Review every student's attendance before submitting.
+                    </p>
+                </div>
+
+                <button type="submit" class="submit-attendance-btn">
+                    ✓ Submit Attendance
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    {% elif selected_class %}
+
+    <div class="attendance-card empty-state">
+        <div class="empty-icon">👨‍🎓</div>
+        <h2>No Students Found</h2>
+        <p>There are no students registered in this class.</p>
+    </div>
+
+    {% endif %}
+
+
+    {% if success %}
+
+    <div class="attendance-summary">
+
+        <div class="summary-title">
+            <span>✓</span>
+            Attendance Submitted Successfully
+        </div>
+
+        <div class="summary-stats">
+
+            <div class="summary-box">
+                <span>Total Students</span>
+                <strong>
+                    {{ present_count + absent_count }}
+                </strong>
+            </div>
+
+            <div class="summary-box present-summary">
+                <span>Present</span>
+                <strong>{{ present_count }}</strong>
+            </div>
+
+            <div class="summary-box absent-summary">
+                <span>Absent</span>
+                <strong>{{ absent_count }}</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

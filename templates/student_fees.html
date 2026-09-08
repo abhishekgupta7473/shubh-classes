@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Fees - Shubh Classes</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .fees-page {
+            min-height: 100vh;
+            padding: 45px 6%;
+            background: #f5f7fb;
+            box-sizing: border-box;
+        }
+
+        .fees-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .fees-title h1 {
+            margin: 0;
+            font-size: 34px;
+            color: #172554;
+        }
+
+        .fees-title p {
+            margin: 8px 0 0;
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .fee-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.07);
+            border: 1px solid #e5e7eb;
+        }
+
+        .summary-card span {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .summary-card h2 {
+            margin: 8px 0 0;
+            color: #172554;
+            font-size: 27px;
+        }
+
+        .fees-card {
+            background: white;
+            border-radius: 22px;
+            padding: 28px;
+            box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+            border: 1px solid #e5e7eb;
+            overflow-x: auto;
+        }
+
+        .fees-card-header {
+            margin-bottom: 22px;
+        }
+
+        .fees-card-header h2 {
+            margin: 0;
+            color: #172554;
+            font-size: 22px;
+        }
+
+        .fees-card-header p {
+            margin: 6px 0 0;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .fees-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        .fees-table th {
+            background: #f8fafc;
+            color: #475569;
+            text-align: left;
+            padding: 15px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .fees-table td {
+            padding: 17px 15px;
+            color: #334155;
+            border-bottom: 1px solid #eef2f7;
+            font-size: 14px;
+        }
+
+        .fees-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .amount {
+            font-weight: 700;
+            color: #172554;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .status-paid {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .no-fees {
+            text-align: center;
+            padding: 55px 20px;
+            color: #64748b;
+        }
+
+        .no-fees-icon {
+            font-size: 45px;
+            margin-bottom: 12px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 20px;
+            background: #172554;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: .2s;
+        }
+
+        .back-btn:hover {
+            background: #1e3a8a;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 800px) {
+            .fees-page {
+                padding: 30px 18px;
+            }
+
+            .fee-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .fees-header {
+                display: block;
+            }
+        }
+        /* PAYMENT MODAL */
+
+.payment-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.60);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.payment-modal-box {
+    width: 100%;
+    max-width: 520px;
+    background: white;
+    border-radius: 24px;
+    padding: 30px;
+    position: relative;
+    box-shadow: 0 25px 70px rgba(15, 23, 42, 0.25);
+    animation: paymentPopup .2s ease;
+}
+
+@keyframes paymentPopup {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.payment-close {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.payment-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-right: 35px;
+}
+
+.payment-modal-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    background: #fff1e8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.payment-modal-header h2 {
+    margin: 0;
+    color: #172554;
+    font-size: 21px;
+}
+
+.payment-modal-header p {
+    margin: 5px 0 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.payment-due {
+    margin: 25px 0 20px;
+    padding: 16px 18px;
+    background: #f8fafc;
+    border-radius: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.payment-due span {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.payment-due strong {
+    color: #172554;
+    font-size: 22px;
+}
+
+.payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.payment-method {
+    width: 100%;
+    border: 1px solid #e2e8f0;
+    background: white;
+    border-radius: 13px;
+    padding: 13px 15px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    text-align: left;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.payment-method:hover {
+    border-color: #ff7428;
+    background: #fffaf7;
+    transform: translateX(2px);
+}
+
+.method-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.method-info {
+    flex: 1;
+}
+
+.method-info strong {
+    display: block;
+    color: #172554;
+    font-size: 14px;
+}
+
+.method-info small {
+    display: block;
+    margin-top: 3px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.method-arrow {
+    color: #94a3b8;
+    font-size: 24px;
+}
+
+.payment-secure {
+    text-align: center;
+    margin-top: 20px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+@media (max-width: 600px) {
+    .payment-modal-box {
+        padding: 22px;
+    }
+
+    .payment-modal-header h2 {
+        font-size: 18px;
+    }
+}
+.payment-history-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 11px 18px;
+    border-radius: 10px;
+    background: #172744;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    transition: .2s;
+}
+
+.payment-history-btn:hover {
+    background: #ff7426;
+    transform: translateY(-2px);
+}
+    </style>
+</head>
+
+<body>
+
+<div class="fees-page">
+
+    <div class="fees-header">
+        <div class="fees-title">
+            <h1>💳 My Fees</h1>
+            <p>View your fee details and payment status</p>
+        </div>
+    </div>
+
+    {% if fees %}
+
+        {% set total_amount = fees | sum(attribute='amount') %}
+        {% set total_paid = fees | sum(attribute='paid_amount') %}
+        {% set total_remaining = total_amount - total_paid %}
+
+        <div class="fee-summary">
+
+            <div class="summary-card">
+                <span>Total Fees</span>
+                <h2>₹{{ total_amount }}</h2>
+            </div>
+
+            <div class="summary-card">
+                <span>Paid Amount</span>
+                <h2>₹{{ total_paid }}</h2>
+            </div>
+
+            <div class="summary-card">
+                <span>Remaining</span>
+                <h2>₹{{ total_remaining }}</h2>
+            </div>
+
+        </div>
+        <div class="payment-card">
+
+    <div class="payment-info">
+        <span class="payment-label">ONLINE PAYMENT</span>
+
+        <h2>Pay Your Outstanding Fee</h2>
+
+        <p>
+            Complete your pending fee payment securely online.
+        </p>
+    </div>
+
+    <div class="payment-amount">
+        <span>Amount Due</span>
+
+        <strong>₹{{ total_remaining }}</strong>
+    </div>
+
+    <button type="button"
+        class="pay-now-btn"
+        id="payNowBtn">
+    💳 Pay Now
+</button>
+<a href="{{ url_for('payment_history', user_id=user_id) }}"
+   class="payment-history-btn">
+    🧾 Payment History
+</a>
+</div>
+
+        <div class="fees-card">
+
+            <div class="fees-card-header">
+                <h2>Fee Details</h2>
+                <p>Your complete fee payment history</p>
+            </div>
+
+            <table class="fees-table">
+
+                <thead>
+                    <tr>
+                        <th>Fee Type</th>
+                        <th>Total Amount</th>
+                        <th>Paid</th>
+                        <th>Remaining</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th>Payment Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for fee in fees %}
+
+                    <tr>
+                        <td><strong>{{ fee.fee_type }}</strong></td>
+
+                        <td class="amount">
+                            ₹{{ fee.amount }}
+                        </td>
+
+                        <td>
+                            ₹{{ fee.paid_amount }}
+                        </td>
+
+                        <td class="amount">
+                            ₹{{ fee.amount - fee.paid_amount }}
+                        </td>
+
+                        <td>
+                            {{ fee.due_date }}
+                        </td>
+
+                        <td>
+                            {% if fee.status == 'Paid' %}
+                                <span class="status status-paid">
+                                    ✓ Paid
+                                </span>
+                            {% else %}
+                                <span class="status status-pending">
+                                    ⏳ {{ fee.status }}
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ fee.payment_date or 'Not Paid' }}
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    {% else %}
+
+        <div class="fees-card">
+            <div class="no-fees">
+                <div class="no-fees-icon">💳</div>
+                <h2>No Fee Records</h2>
+                <p>No fee records have been added to your account yet.</p>
+            </div>
+        </div>
+
+    {% endif %}
+
+    <a href="{{ url_for('student_dashboard', user_id=user_id) }}" class="back-btn">
+    ← Back to Dashboard
+</a>
+
+</div>
+<!-- PAYMENT METHOD MODAL -->
+<div class="payment-modal" id="paymentModal">
+
+    <div class="payment-modal-box">
+
+        <button class="payment-close"
+                id="closePaymentModal">
+            ×
+        </button>
+
+        <div class="payment-modal-header">
+            <div class="payment-modal-icon">
+                💳
+            </div>
+
+            <div>
+                <h2>Choose Payment Method</h2>
+                <p>Select how you want to pay your outstanding fee.</p>
+            </div>
+        </div>
+
+
+        <div class="payment-due">
+            <span>Amount to Pay</span>
+            <strong>₹{{ total_remaining }}</strong>
+        </div>
+
+
+        <div class="payment-methods">
+
+            <button type="button"
+        class="payment-method"
+        onclick="selectPaymentMethod('UPI')">
+                <span class="method-icon">📱</span>
+
+                <span class="method-info">
+                    <strong>UPI</strong>
+                    <small>Google Pay, PhonePe, Paytm & more</small>
+                </span>
+
+                <span class="method-arrow">›</span>
+            </button>
+
+
+            <button type="button"
+        class="payment-method"
+        onclick="selectPaymentMethod('Debit Card')">
+                <span class="method-icon">💳</span>
+
+                <span class="method-info">
+                    <strong>Debit Card</strong>
+                    <small>Visa, Mastercard, RuPay & more</small>
+                </span>
+
+                <span class="method-arrow">›</span>
+            </button>
+
+
+            <button type="button"
+        class="payment-method"
+        onclick="selectPaymentMethod('Credit Card')">
+                <span class="method-icon">💳</span>
+
+                <span class="method-info">
+                    <strong>Credit Card</strong>
+                    <small>Visa, Mastercard, Amex & more</small>
+                </span>
+
+                <span class="method-arrow">›</span>
+            </button>
+
+
+            <button type="button"
+        class="payment-method"
+        onclick="selectPaymentMethod('Net Banking')">
+                <span class="method-icon">🏦</span>
+
+                <span class="method-info">
+                    <strong>Net Banking</strong>
+                    <small>All major banks supported</small>
+                </span>
+
+                <span class="method-arrow">›</span>
+            </button>
+
+
+            <button type="button"
+        class="payment-method"
+        onclick="selectPaymentMethod('QR Code')">
+                <span class="method-icon">▣</span>
+
+                <span class="method-info">
+                    <strong>QR Code</strong>
+                    <small>Scan and pay using your UPI app</small>
+                </span>
+
+                <span class="method-arrow">›</span>
+            </button>
+
+        </div>
+
+        <div class="payment-secure">
+            🔒 Secure payment
+        </div>
+
+    </div>
+
+</div>
+<script>
+    const payNowBtn = document.getElementById("payNowBtn");
+    const paymentModal = document.getElementById("paymentModal");
+    const closePaymentModal = document.getElementById("closePaymentModal");
+
+    payNowBtn.addEventListener("click", function () {
+        paymentModal.style.display = "flex";
+    });
+
+    closePaymentModal.addEventListener("click", function () {
+        paymentModal.style.display = "none";
+    });
+
+    paymentModal.addEventListener("click", function (event) {
+        if (event.target === paymentModal) {
+            paymentModal.style.display = "none";
+        }
+    });
+    function selectPaymentMethod(method) {
+    alert("Selected Payment Method: " + method);
+}
+</script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+document.getElementById("payNowBtn").addEventListener("click", async function () {
+
+    const button = this;
+
+    button.disabled = true;
+    button.innerText = "Opening Payment...";
+
+    try {
+
+        const response = await fetch("/student/create-payment", {
+            method: "POST"
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Unable to create payment.");
+        }
+
+        const options = {
+            key: data.key_id,
+            amount: data.amount,
+            currency: data.currency,
+
+            name: "Shubh Classes",
+            description: "Student Fee Payment",
+
+            order_id: data.order_id,
+
+            theme: {
+                color: "#ff7426"
+            },
+            handler: async function (paymentResponse) {
+
+    try {
+
+        const response = await fetch("/student/verify-payment", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                razorpay_payment_id: paymentResponse.razorpay_payment_id,
+                razorpay_order_id: paymentResponse.razorpay_order_id,
+                razorpay_signature: paymentResponse.razorpay_signature,
+                
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(
+                result.error || "Payment verification failed."
+            );
+        }
+alert("Payment successful! Your fee has been updated.");
+
+window.location.href =
+    "/student/payment-receipt/" +
+    paymentResponse.razorpay_payment_id;
+    } catch (error) {
+
+        console.error(error);
+
+        alert(error.message);
+    }
+},
+            modal: {
+                ondismiss: function () {
+                    button.disabled = false;
+                    button.innerText = "💳 Pay Now";
+                }
+                
+            }
+            
+        };
+
+        const razorpay = new Razorpay(options);
+
+        razorpay.open();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(error.message);
+
+        button.disabled = false;
+        button.innerText = "💳 Pay Now";
+    }
+
+});
+</script>
+</body>
+</html>

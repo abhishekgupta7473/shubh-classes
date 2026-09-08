@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fee Payment Receipt - Shubh Classes</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #eef2f7;
+            color: #172744;
+        }
+
+        .receipt-page {
+            padding: 35px 15px;
+        }
+
+        .receipt {
+            max-width: 900px;
+            margin: auto;
+            background: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 45px rgba(23, 39, 68, 0.12);
+            border: 1px solid #dfe5ed;
+        }
+
+        /* HEADER */
+
+        .receipt-header {
+            padding: 30px 35px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 4px solid #ff7426;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: 30px;
+            color: #172744;
+            letter-spacing: .5px;
+        }
+
+        .brand p {
+            margin: 7px 0 0;
+            color: #ff7426;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .receipt-title {
+            text-align: right;
+        }
+
+        .receipt-title h2 {
+            margin: 0;
+            background: #172744;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            letter-spacing: .5px;
+        }
+
+        .receipt-title p {
+            margin: 10px 0 0;
+            font-size: 13px;
+            color: #667085;
+        }
+
+        /* SUCCESS */
+
+        .success-section {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .success-badge {
+            display: inline-block;
+            padding: 9px 18px;
+            border-radius: 30px;
+            background: #e8f8ef;
+            color: #198754;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        /* INFORMATION */
+
+        .info-wrapper {
+            margin: 0 35px 25px;
+            border: 1px solid #d9e1eb;
+            border-radius: 10px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #fbfcfe;
+        }
+
+        .info-box {
+            padding: 25px;
+        }
+
+        .info-box + .info-box {
+            border-left: 1px dashed #b9c5d4;
+        }
+
+        .info-heading {
+            font-size: 15px;
+            font-weight: 800;
+            color: #172744;
+            margin-bottom: 18px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 8px 0;
+            font-size: 13px;
+        }
+
+        .info-row span:first-child {
+            color: #718096;
+        }
+
+        .info-row strong {
+            text-align: right;
+            color: #172744;
+            word-break: break-word;
+        }
+
+        /* PAYMENT TABLE */
+
+        .payment-section {
+            margin: 0 35px 25px;
+            border: 1px solid #d9e1eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .section-heading {
+            background: #172744;
+            color: white;
+            padding: 13px 18px;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f4f7fa;
+            color: #536174;
+            font-size: 12px;
+            text-align: left;
+            padding: 13px;
+            border-bottom: 1px solid #dfe5ed;
+        }
+
+        td {
+            padding: 16px 13px;
+            font-size: 13px;
+            border-bottom: 1px solid #edf0f4;
+        }
+
+        .amount {
+            color: #ff7426;
+            font-weight: 800;
+            font-size: 16px;
+            text-align: right;
+        }
+
+        .total-row td {
+            border-bottom: none;
+            font-weight: 800;
+            font-size: 15px;
+        }
+
+        .total-label {
+            text-align: right;
+            color: #172744;
+        }
+
+        .total-amount {
+            color: #ff7426;
+            font-size: 22px !important;
+            text-align: right;
+        }
+
+        /* LOWER SECTION */
+
+        .lower-section {
+            margin: 0 35px 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .notes {
+            background: #f5f9ff;
+            border: 1px solid #d9e7f7;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .notes h3 {
+            margin: 0 0 12px;
+            font-size: 14px;
+        }
+
+        .notes ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .notes li {
+            margin-bottom: 8px;
+            color: #667085;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* SIGNATURE */
+
+        .signature {
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .signature-name {
+            font-family: "Brush Script MT", "Segoe Script", cursive;
+            font-size: 34px;
+            font-style: italic;
+            color: #172744;
+            margin-bottom: 5px;
+        }
+
+        .signature-line {
+            width: 220px;
+            height: 1px;
+            background: #172744;
+            margin: 0 auto 8px;
+        }
+
+        .signature-label {
+            font-size: 12px;
+            font-weight: 800;
+            color: #172744;
+        }
+
+        .signature-institute {
+            margin-top: 5px;
+            color: #ff7426;
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        /* FOOTER */
+
+        .receipt-footer {
+            background: #f5f7fa;
+            border-top: 1px solid #e1e6ed;
+            padding: 18px;
+            text-align: center;
+            color: #718096;
+            font-size: 12px;
+        }
+
+        .footer-highlight {
+            color: #172744;
+            font-weight: 700;
+        }
+
+        /* BUTTONS */
+
+        .receipt-actions {
+            max-width: 900px;
+            margin: 20px auto 0;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .receipt-btn {
+            border: none;
+            border-radius: 9px;
+            padding: 12px 20px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .print-btn {
+            background: #172744;
+            color: white;
+        }
+
+        .back-btn {
+            background: #ff7426;
+            color: white;
+        }
+
+        .receipt-btn:hover {
+            opacity: .9;
+            transform: translateY(-1px);
+        }
+
+        /* PRINT */
+
+        @media print {
+
+            body {
+                background: white;
+            }
+
+            .receipt-page {
+                padding: 0;
+            }
+
+            .receipt {
+                box-shadow: none;
+                border: none;
+                max-width: none;
+            }
+
+            .receipt-actions {
+                display: none;
+            }
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .receipt-header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .receipt-title {
+                text-align: left;
+            }
+
+            .info-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .info-box + .info-box {
+                border-left: none;
+                border-top: 1px dashed #b9c5d4;
+            }
+
+            .lower-section {
+                grid-template-columns: 1fr;
+            }
+
+            .receipt-header,
+            .info-wrapper,
+            .payment-section,
+            .lower-section {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+
+            .receipt-header {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .receipt-actions {
+                flex-direction: column;
+                padding: 0 15px;
+            }
+
+            .receipt-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="receipt-page">
+
+    <div class="receipt">
+
+        <!-- HEADER -->
+
+        <div class="receipt-header">
+
+            <div class="brand">
+                <h1>SHUBH CLASSES</h1>
+                <p>Quality Education, Bright Future</p>
+            </div>
+
+            <div class="receipt-title">
+                <h2>FEE PAYMENT RECEIPT</h2>
+                <p>Receipt generated electronically</p>
+            </div>
+
+        </div>
+
+
+        <!-- SUCCESS -->
+
+        <div class="success-section">
+
+            <span class="success-badge">
+                ✓ PAYMENT SUCCESSFUL
+            </span>
+
+        </div>
+
+
+        <!-- STUDENT + PAYMENT INFORMATION -->
+
+        <div class="info-wrapper">
+
+            <div class="info-box">
+
+                <div class="info-heading">
+                    👤 STUDENT INFORMATION
+                </div>
+
+                <div class="info-row">
+                    <span>Student Name</span>
+                    <strong>{{ student.name }}</strong>
+                </div>
+
+                <div class="info-row">
+                    <span>Student User ID</span>
+                    <strong>{{ student.user_id }}</strong>
+                </div>
+
+                <div class="info-row">
+                    <span>Class</span>
+                    <strong>{{ student.class_name }}</strong>
+                </div>
+
+                <div class="info-row">
+                    <span>Course</span>
+                    <strong>{{ student.course }}</strong>
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <div class="info-heading">
+                    💳 PAYMENT INFORMATION
+                </div>
+
+                <div class="info-row">
+                    <span>Payment ID</span>
+                    <strong>{{ payment.id }}</strong>
+                </div>
+
+                <div class="info-row">
+                    <span>Order ID</span>
+                    <strong>{{ payment.order_id }}</strong>
+                </div>
+
+                <div class="info-row">
+                    <span>Payment Method</span>
+                    <strong>Razorpay</strong>
+                </div>
+
+                <div class="info-row">
+                    <span>Payment Status</span>
+                    <strong style="color:#198754;">Paid</strong>
+                </div>
+
+                <div class="info-row">
+                    <span>Payment Date</span>
+                    <strong>{{ payment_date }}</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PAYMENT DETAILS -->
+
+        <div class="payment-section">
+
+            <div class="section-heading">
+                PAYMENT DETAILS
+            </div>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount (₹)</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Student Fee Payment</td>
+
+                        <td class="amount">
+                            ₹{{ "%.2f"|format(amount) }}
+                        </td>
+                    </tr>
+
+                    <tr class="total-row">
+
+                        <td class="total-label">
+                            TOTAL AMOUNT PAID
+                        </td>
+
+                        <td class="total-amount">
+                            ₹{{ "%.2f"|format(amount) }}
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- NOTES + SIGNATURE -->
+
+        <div class="lower-section">
+
+            <div class="notes">
+
+                <h3>
+                    ℹ IMPORTANT NOTES
+                </h3>
+
+                <ul>
+                    <li>
+                        This is a system-generated fee payment receipt.
+                    </li>
+
+                    <li>
+                        This receipt confirms the successful online payment.
+                    </li>
+
+                    <li>
+                        Please keep this receipt for your records.
+                    </li>
+
+                    <li>
+                        For any payment-related issue, contact the institute office.
+                    </li>
+                </ul>
+
+            </div>
+
+
+            <div class="signature">
+
+                <div class="signature-name">
+                    Ramji Yadav
+                </div>
+
+                <div class="signature-line"></div>
+
+                <div class="signature-label">
+                    AUTHORIZED SIGNATURE
+                </div>
+
+                <div class="signature-institute">
+                    SHUBH CLASSES
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="receipt-footer">
+
+            Thank you for your payment.
+
+            <span class="footer-highlight">
+                We appreciate your trust in Shubh Classes.
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTION BUTTONS -->
+
+    <div class="receipt-actions">
+
+        <button
+            type="button"
+            class="receipt-btn print-btn"
+            onclick="window.print()">
+            🖨 Print / Save PDF
+        </button>
+
+        <a
+            href="{{ url_for('student_fees', user_id=student.user_id) }}"
+            class="receipt-btn back-btn">
+            ← Back to Fees
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
