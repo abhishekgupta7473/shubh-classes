@@ -29,9 +29,11 @@ razorpay_client = razorpay.Client(
 )
 app.secret_key = "shubh_classes_secret_key"
 db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    database="shubh_classes"
+    host=os.getenv("MYSQLHOST"),
+    user=os.getenv("MYSQLUSER"),
+    password=os.getenv("MYSQLPASSWORD"),
+    database=os.getenv("MYSQLDATABASE"),
+    port=int(os.getenv("MYSQLPORT", 3306))
 )
 
 @app.route("/admin/dashboard")
