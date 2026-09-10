@@ -374,6 +374,7 @@
     transform: translateY(-2px);
 }
     </style>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 
 <body>
@@ -635,26 +636,169 @@
 
 </div>
 <script>
-    const payNowBtn = document.getElementById("payNowBtn");
-    const paymentModal = document.getElementById("paymentModal");
-    const closePaymentModal = document.getElementById("closePaymentModal");
+const payNowBtn = document.getElementById("payNowBtn");
 
-    payNowBtn.addEventListener("click", function () {
-        paymentModal.style.display = "flex";
-    });
+payNowBtn.addEventListener("click", async function () {
 
-    closePaymentModal.addEventListener("click", function () {
-        paymentModal.style.display = "none";
-    });
+    payNowBtn.disabled = true;
+    payNowBtn.innerText = "Opening Payment...";
 
-    paymentModal.addEventListener("click", function (event) {
-        if (event.target === paymentModal) {
-            paymentModal.style.display = "none";
+    try {
+
+        // Create Razorpay order
+        const response = await fetch("/student/create-payment", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const contentType = response.headers.get("content-type") || "";
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error("Create payment error:", errorText);
+            throw new Error("Unable to create payment order.");
         }
-    });
-    function selectPaymentMethod(method) {
-    alert("Selected Payment Method: " + method);
-}
+
+        if (!contentType.includes("application/json")) {
+            const errorText = await response.text();
+            console.error("Expected JSON but received:", errorText);
+            throw new Error("Server returned an invalid response.");
+        }
+
+        const order = await response.json();
+
+        if (!order.order_id || !order.key_id) {
+            throw new Error("Invalid Razorpay order response.");
+        }
+
+        // Razorpay Checkout options
+        const options = {
+            key: order.key_id,
+            amount: order.amount,
+            currency: order.currency,
+            order_id: order.order_id,
+
+            name: "Shubh Classes",
+            description: "Fee Payment",
+
+            handler: async function (paymentResponse) {
+
+                try {
+
+                    const verifyResponse = await fetch(
+                        "/student/verify-payment",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                razorpay_payment_id:
+                                    paymentResponse.razorpay_payment_id,
+
+                                razorpay_order_id:
+                                    paymentResponse.razorpay_order_id,
+
+                                razorpay_signature:
+                                    paymentResponse.razorpay_signature
+                            })
+                        }
+                    );
+
+                    const verifyContentType =
+                        verifyResponse.headers.get("content-type") || "";
+
+                    if (!verifyResponse.ok) {
+                        const errorText = await verifyResponse.text();
+                        console.error(
+                            "Payment verification error:",
+                            errorText
+                        );
+                        throw new Error(
+                            "Payment verification failed."
+                        );
+                    }
+
+                    if (!verifyContentType.includes("application/json")) {
+                        throw new Error(
+                            "Invalid verification response."
+                        );
+                    }
+
+                    const result = await verifyResponse.json();
+
+                    if (result.success) {
+                        alert("Payment successful!");
+
+                        window.location.href =
+                            "/student/fees/" +
+                            encodeURIComponent(
+                                "{{ user_id }}"
+                            );
+                    } else {
+                        alert(
+                            result.error ||
+                            "Payment verification failed."
+                        );
+                    }
+
+                } catch (error) {
+
+                    console.error(error);
+
+                    alert(
+                        "Payment was completed, but verification failed. Please contact the administrator."
+                    );
+                }
+            },
+
+            modal: {
+                ondismiss: function () {
+                    payNowBtn.disabled = false;
+                    payNowBtn.innerText = "💳 Pay Now";
+                }
+            },
+
+            theme: {
+                color: "#ff7426"
+            }
+        };
+
+        const razorpay = new Razorpay(options);
+
+        razorpay.on("payment.failed", function (response) {
+
+            console.error(
+                "Razorpay payment failed:",
+                response.error
+            );
+
+            alert(
+                response.error.description ||
+                "Payment failed. Please try again."
+            );
+
+            payNowBtn.disabled = false;
+            payNowBtn.innerText = "💳 Pay Now";
+        });
+
+        razorpay.open();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            error.message ||
+            "Unable to start payment. Please try again."
+        );
+
+        payNowBtn.disabled = false;
+        payNowBtn.innerText = "💳 Pay Now";
+    }
+});
 </script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
