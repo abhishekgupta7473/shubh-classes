@@ -1347,6 +1347,7 @@ def teacher_schedule(teacher_user_id):
     return render_template("teacher_schedule.html", schedule=schedule)
 @app.route("/admin/add-timetable", methods=["GET", "POST"])
 def add_timetable():
+    cursor = db.cursor()
     if request.method == "POST":
         class_name = request.form["class_name"]
         day_name = request.form["day_name"]
@@ -1356,7 +1357,7 @@ def add_timetable():
         teacher_user_id = request.form["teacher_user_id"]
         room = request.form["room"]
 
-        cursor = db.cursor()
+        
 
         if day_name == "All Days":
 
@@ -1389,9 +1390,9 @@ def add_timetable():
             )
         )
 
-    else:
+        else:
 
-     cursor.execute(
+         cursor.execute(
         """
         INSERT INTO timetable
         (class_name, day_name, start_time, end_time,
