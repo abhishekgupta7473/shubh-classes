@@ -1370,8 +1370,8 @@ def add_timetable():
         "Sunday"
     ]
 
-    for day in all_days:
-        cursor.execute(
+        for day in all_days:
+         cursor.execute(
             """
             INSERT INTO timetable
             (class_name, day_name, start_time, end_time,
