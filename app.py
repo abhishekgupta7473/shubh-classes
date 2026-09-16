@@ -1347,8 +1347,11 @@ def teacher_schedule(teacher_user_id):
     return render_template("teacher_schedule.html", schedule=schedule)
 @app.route("/admin/add-timetable", methods=["GET", "POST"])
 def add_timetable():
-    cursor = db.cursor()
+
+    success = None
+
     if request.method == "POST":
+
         class_name = request.form["class_name"]
         day_name = request.form["day_name"]
         start_time = request.form["start_time"]
@@ -1357,49 +1360,72 @@ def add_timetable():
         teacher_user_id = request.form["teacher_user_id"]
         room = request.form["room"]
 
-        
+        cursor = db.cursor()
 
         if day_name == "All Days":
 
-         all_days = [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday"
-    ]
+            all_days = [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+            ]
 
-        for day in all_days:
-         cursor.execute(
-            """
-            INSERT INTO timetable
-            (class_name, day_name, start_time, end_time,
-             subject, teacher_user_id, room)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
-            """,
-            (
-                class_name,
-                day,
-                start_time,
-                end_time,
-                subject,
-                teacher_user_id,
-                room
-            )
-        )
+            for day in all_days:
+
+                cursor.execute(
+                    """
+                    INSERT INTO timetable
+                    (class_name, day_name, start_time, end_time,
+                     subject, teacher_user_id, room)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    """,
+                    (
+                        class_name,
+                        day,
+                        start_time,
+                        end_time,
+                        subject,
+                        teacher_user_id,
+                        room
+                    )
+                )
 
         else:
 
-         cursor.execute(
+            cursor.execute(
+                """
+                INSERT INTO timetable
+                (class_name, day_name, start_time, end_time,
+                 subject, teacher_user_id, room)
+                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                """,
+                (
+                    class_name,
+                    day_name,
+                    start_time,
+                    end_time,
+                    subject,
+                    teacher_user_id,
+                    room
+                )
+            )
+
+        db.commit()
+        cursor.close()
+
+        success = "Timetable saved successfully!"
+
+    # Fetch saved timetable
+    cursor = db.cursor(dictionary=True)
+
+    cursor.execute(
         """
-        INSERT INTO timetable
-        (class_name, day_name, start_time, end_time,
-         subject, teacher_user_id, room)
-        VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """,
-        (
+        SELECT
+            id,
             class_name,
             day_name,
             start_time,
@@ -1407,14 +1433,31 @@ def add_timetable():
             subject,
             teacher_user_id,
             room
-        )
+        FROM timetable
+        ORDER BY
+            FIELD(
+                day_name,
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+                'Sunday'
+            ),
+            start_time
+        """
     )
-    db.commit()
+
+    schedule = cursor.fetchall()
+
     cursor.close()
+
     return render_template(
-    "add_timetable.html",
-    success="Timetable saved successfully!"
-)
+        "add_timetable.html",
+        schedule=schedule,
+        success=success
+    )
     
 @app.route("/admin/delete-timetable/<int:timetable_id>", methods=["POST"])
 def delete_timetable(timetable_id):
