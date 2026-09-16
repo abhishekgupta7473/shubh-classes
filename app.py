@@ -1358,6 +1358,19 @@ def add_timetable():
 
         cursor = db.cursor()
 
+        if day_name == "All Days":
+
+         all_days = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+    ]
+
+    for day in all_days:
         cursor.execute(
             """
             INSERT INTO timetable
@@ -1367,7 +1380,7 @@ def add_timetable():
             """,
             (
                 class_name,
-                day_name,
+                day,
                 start_time,
                 end_time,
                 subject,
@@ -1376,9 +1389,28 @@ def add_timetable():
             )
         )
 
-        db.commit()
-        cursor.close()
-        return render_template(
+    else:
+
+     cursor.execute(
+        """
+        INSERT INTO timetable
+        (class_name, day_name, start_time, end_time,
+         subject, teacher_user_id, room)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """,
+        (
+            class_name,
+            day_name,
+            start_time,
+            end_time,
+            subject,
+            teacher_user_id,
+            room
+        )
+    )
+    db.commit()
+    cursor.close()
+    return render_template(
     "add_timetable.html",
     success="Timetable saved successfully!"
 )
