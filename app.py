@@ -35,6 +35,27 @@ db = mysql.connector.connect(
     database=os.getenv("MYSQLDATABASE"),
     port=int(os.getenv("MYSQLPORT", 3306))
 )
+def ensure_db_connection():
+    global db
+
+    try:
+        db.ping(reconnect=True, attempts=3, delay=2)
+    except Exception:
+        db = mysql.connector.connect(
+            host=os.getenv("MYSQLHOST"),
+            user=os.getenv("MYSQLUSER"),
+            password=os.getenv("MYSQLPASSWORD"),
+            database=os.getenv("MYSQLDATABASE"),
+            port=int(os.getenv("MYSQLPORT", 3306)),
+            connection_timeout=10
+        )
+
+    return db
+
+
+@app.before_request
+def check_database_connection():
+    ensure_db_connection()
 
 @app.route("/admin/dashboard")
 def admin_dashboard():
