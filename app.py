@@ -1415,7 +1415,20 @@ def add_timetable():
     "add_timetable.html",
     success="Timetable saved successfully!"
 )
-    return render_template("add_timetable.html")
+    
+@app.route("/admin/delete-timetable/<int:timetable_id>", methods=["POST"])
+def delete_timetable(timetable_id):
+    cursor = db.cursor()
+
+    cursor.execute(
+        "DELETE FROM timetable WHERE id = %s",
+        (timetable_id,)
+    )
+
+    db.commit()
+    cursor.close()
+
+    return redirect(url_for("add_timetable"))
 @app.route("/student/fees/<user_id>")
 def student_fees(user_id):
     cursor = db.cursor(dictionary=True)
